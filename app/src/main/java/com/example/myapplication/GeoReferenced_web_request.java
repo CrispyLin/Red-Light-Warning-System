@@ -37,6 +37,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
     private LocationListener locationListener;
     private String session_code;
     private JSONObject json_data;
+    private Prediction prediction;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -100,9 +101,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                     if (TTS_response.equals("")) {
                         try {
                             json_data = new JSONObject(TTS_response);
-
-
-
+                            prediction = new Prediction(json_data);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

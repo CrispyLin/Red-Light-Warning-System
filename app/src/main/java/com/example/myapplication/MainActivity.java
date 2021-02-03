@@ -12,7 +12,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 public class MainActivity extends AppCompatActivity {
-    //public Prediction light_data;
+    public Prediction light_data;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
