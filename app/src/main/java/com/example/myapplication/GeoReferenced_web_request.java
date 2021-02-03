@@ -23,9 +23,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+
 public class GeoReferenced_web_request extends AppCompatActivity {
-    // private variables
-    private Button btn; //The button will send request to the TTS server upon click
     private TextView textView_longitude;
     private TextView textView_latitude;
     private TextView textView_heading;
@@ -49,7 +48,9 @@ public class GeoReferenced_web_request extends AppCompatActivity {
         }
 
 
-        btn = (Button) findViewById(R.id.Btn_request);
+        // private variables
+        //The button will send request to the TTS server upon click
+        Button btn = (Button) findViewById(R.id.Btn_request);
         textView_latitude = (TextView) findViewById(R.id.textView_latitude);
         textView_longitude = (TextView) findViewById(R.id.textView_longitude);
         textView_heading = (TextView) findViewById(R.id.textView_heading);
@@ -92,9 +93,10 @@ public class GeoReferenced_web_request extends AppCompatActivity {
 
                 // check if TTS returns response, and parse the response
                 if (TTS_response != null) {
-                    if (!TTS_response.equals("")) {
-                        // do parsing here, you might want to create an obj as a private variable on the top
+                    if (TTS_response.equals("")) {
+                        return;
                     }
+                    // do parsing here, you might want to create an obj as a private variable on the top
                 }
             }
         });
@@ -103,21 +105,17 @@ public class GeoReferenced_web_request extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch(requestCode){
-            case 10:
-                requestGPS();
-                break;
-            default:
-                break;
+        if (requestCode == 10) {
+            requestGPS();
         }
     }
 
-    private void requestGPS(){
+    private void requestGPS() {
         // first check for permissions
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.INTERNET}
-                        ,10);
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.INTERNET}
+                        , 10);
             }
             return;
         }

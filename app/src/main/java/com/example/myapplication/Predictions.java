@@ -1,7 +1,6 @@
 package com.example.myapplication;
 
 import org.json.JSONObject;
-
 public class Predictions {
     public int time_to_change;
     public String bulb_color;
