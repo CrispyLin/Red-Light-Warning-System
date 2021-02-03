@@ -23,6 +23,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class GeoReferenced_web_request extends AppCompatActivity {
     private TextView textView_longitude;
@@ -33,6 +36,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
     private LocationManager locationManager;
     private LocationListener locationListener;
     private String session_code;
+    private JSONObject json_data;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -94,7 +98,14 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                 // check if TTS returns response, and parse the response
                 if (TTS_response != null) {
                     if (TTS_response.equals("")) {
-                        return;
+                        try {
+                            json_data = new JSONObject(TTS_response);
+
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                     // do parsing here, you might want to create an obj as a private variable on the top
                 }
