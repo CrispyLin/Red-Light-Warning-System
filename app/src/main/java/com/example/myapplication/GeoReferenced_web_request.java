@@ -91,9 +91,10 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                 }
 
                 // check if TTS returns response, and parse the response
-                if(TTS_response != ""){
-                    // do parsing here, you might want to create an obj as a private variable on the top
-
+                if (TTS_response != null) {
+                    if (!TTS_response.equals("")) {
+                        // do parsing here, you might want to create an obj as a private variable on the top
+                    }
                 }
             }
         });

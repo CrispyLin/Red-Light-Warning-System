@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,7 +44,7 @@ public class TestTest
             sessionCode = m.group(1);
         }
 
-        if (sessionCode.length() == 0 ) {
+        if (Objects.requireNonNull(sessionCode).length() == 0 ) {
             Log.e("Mytag","Error in finding session code.");
             session_code = "";
             return;
