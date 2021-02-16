@@ -23,6 +23,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.google.gson.Gson;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -61,6 +63,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
         textView_heading = (TextView) findViewById(R.id.textView_heading);
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
@@ -81,6 +84,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
         };
 
         //start getting GPS locations
+
         requestGPS();
 
         //when the btn is triggered, the program starts to send GET request to the TTS's server and receive response from the TTS server
@@ -95,19 +99,10 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                     e.printStackTrace();
                     return;
                 }
+                //TTS_RESPONSE
+                Gson gson = new Gson();
+                prediction = gson.fromJson(TTS_response, Prediction.class);
 
-                // check if TTS returns response, and parse the response
-                if (TTS_response != null) {
-                    if (TTS_response.equals("")) {
-                        try {
-                            json_data = new JSONObject(TTS_response);
-                            prediction = new Prediction(json_data);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    // do parsing here, you might want to create an obj as a private variable on the top
-                }
             }
         });
     }
