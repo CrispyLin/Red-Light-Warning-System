@@ -100,9 +100,10 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                     return;
                 }
                 //TTS_RESPONSE
-                Gson gson = new Gson();
-                prediction = gson.fromJson(TTS_response, Prediction.class);
-
+                if(TTS_response !="") {
+                    Gson gson = new Gson();
+                    prediction = gson.fromJson(TTS_response, Prediction.class);
+                }
             }
         });
     }
@@ -117,6 +118,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
 
     private void requestGPS() {
         // first check for permissions
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.INTERNET}

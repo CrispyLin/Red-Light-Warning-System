@@ -6,7 +6,6 @@ import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.List;
 
 public class Prediction {
