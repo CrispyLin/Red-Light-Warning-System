@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 
@@ -34,6 +35,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
     private TextView textView_latitude;
     private TextView textView_heading;
     private String longitude, latitude, heading;
+    private static double speed;
     //two objs to use GPS service
     private LocationManager locationManager;
     private LocationListener locationListener;
@@ -71,6 +73,9 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                 longitude = String.valueOf(location.getLongitude());
                 latitude = String.valueOf(location.getLatitude());
                 heading = String.valueOf(location.getBearing());
+                //Get the speed if it is available, in meters/second over ground.
+                //String.valueOf(location.getSpeed()) returns speed in string, parse it will get a double value.
+                speed = Double.parseDouble(String.valueOf(location.getSpeed()));
                 textView_longitude.setText(longitude);
                 textView_latitude.setText(latitude);
                 textView_heading.setText(heading);
@@ -100,9 +105,12 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                     return;
                 }
                 //TTS_RESPONSE
-                if(TTS_response !="") {
+                if(!TTS_response.equals("")) {
                     Gson gson = new Gson();
                     prediction = gson.fromJson(TTS_response, Prediction.class);
+                    Algorithm algorithm = new Algorithm();
+                    algorithm.set(prediction, speed);
+                    double timeToStopLine = algorithm.calculateTimeToStopLine();
                 }
             }
         });

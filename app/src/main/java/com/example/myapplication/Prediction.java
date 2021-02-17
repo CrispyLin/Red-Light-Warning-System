@@ -9,64 +9,66 @@ import org.json.JSONObject;
 import java.util.List;
 
 public class Prediction {
-
     @SerializedName("Data")
     Data data;
     public class Data {
-    String DataVersion;
-    String TSPackage;
-    @SerializedName("Data")
-    Data_ data;
+        String DataVersion;
+        String TSPackage;
+        @SerializedName("Data")
+        Data_ data;
     }
 
 
     public class Data_ {
         @SerializedName("Items")
         Item[] items;
+    }
 
-}
- public class Item {
+    public class Item {
         String Name;
-     @SerializedName("Intersections")
+        @SerializedName("Intersections")
         Intersections intersections;
- }
+    }
 
- public class Intersections {
-     @SerializedName("Items")
+    public class Intersections {
+        @SerializedName("Items")
         Intersection[] items;
- }
-public class Intersection {
+    }
+
+    public class Intersection {
         int SCNr;
         int ActivePlan;
         String Name;
-        String TTSPrediction;
+        //String TTSPrediction;
         String Alert;
+        String TSPrediction;
+        String IntersectionType;
         @SerializedName("Phases")
         Phases phases;
         Topology Topology;
+    }
 
-}
-class Phases{
-    @SerializedName("Items")
+    class Phases{
+        @SerializedName("Items")
         Phase[] items;
-}
-class Phase {
+    }
+
+    class Phase {
         int PhaseNr;
         String BulbColor;
-    PredictiveChanges PredictiveChanges;
+        PredictiveChanges PredictiveChanges;
+    }
 
-
-}
-class PredictiveChanges{
+    class PredictiveChanges{
         PredictiveChange[] Items;
-}
-class PredictiveChange{
+    }
+
+    class PredictiveChange{
         int TimeToChange;
         int Confidence;
         String BulbColor;
-
-
     }
+
     class Topology{
         int ApproachID;
         double ApproachBearing;
@@ -79,27 +81,28 @@ class PredictiveChange{
         OutLine StopZoneOutLine;
         OutLine StopLineVertices;
     }
+
     class Turns{
         Turn[] Items;
     }
+
     class Turn{
         String TurnType;
         int PrimarySignalHeadID;
     }
+
     class OutLine{
         Vertices Vertices;
     }
 
     class Vertices {
         Vert[] Items;
-
     }
+
     class Vert{
         double X;
         double Y;
-
     }
-
 }
 //
 //{"Data":{"DataVersion":"1.0.10","TSPackage":"2021-02-03 02:26:29.044","Data":
