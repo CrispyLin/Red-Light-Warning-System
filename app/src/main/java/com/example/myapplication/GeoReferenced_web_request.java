@@ -110,7 +110,8 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                     prediction = gson.fromJson(TTS_response, Prediction.class);
                     Algorithm algorithm = new Algorithm();
                     algorithm.set(prediction, speed);
-                    double timeToStopLine = algorithm.calculateTimeToStopLine();
+                    algorithm.compareTwoTimes();
+
                 }
             }
         });
@@ -136,7 +137,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
         }
         // this code won't execute IF permissions are not allowed, because in the line above there is return statement.
         // request for GPS location
-        locationManager.requestLocationUpdates("gps", 2000, 0, locationListener);
+        locationManager.requestLocationUpdates("gps", 1000, 0, locationListener);
     }
 
     @Override
