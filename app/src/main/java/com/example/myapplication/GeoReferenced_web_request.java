@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
@@ -42,7 +43,6 @@ public class GeoReferenced_web_request extends AppCompatActivity {
     private String session_code;
     private JSONObject json_data;
     private Prediction prediction;
-
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -96,7 +96,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String geoReferenceURL = "http://216.151.19.133:5832/APhA/Services/GeoReferencedPredictions?sessionCode=" + session_code + "&latitude=" + latitude + "&longitude=" + longitude + "&heading=" + heading + "&includeTopology=yes&asTurns=yes&includePermissives=no&includeAmber=no&bearingType=Compass&matchingMode=TTSDefault&version=1.0.10&returnJSON=yes";
+                String geoReferenceURL = "http://38.103.174.3:5832/APhA/Services/GeoReferencedPredictions?sessionCode=" + session_code + "&latitude=" + latitude + "&longitude=" + longitude + "&heading=" + heading + "&includeTopology=yes&asTurns=yes&includePermissives=no&includeAmber=no&bearingType=Compass&matchingMode=TTSDefault&version=1.0.10&returnJSON=yes";
                 String TTS_response = "";
                 try {
                     TTS_response = TestTest.SendInputs(geoReferenceURL);
@@ -110,8 +110,11 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                     prediction = gson.fromJson(TTS_response, Prediction.class);
                     Algorithm algorithm = new Algorithm();
                     algorithm.set(prediction, speed);
-                    algorithm.compareTwoTimes();
-
+                    try {
+                        algorithm.ToCompare();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });

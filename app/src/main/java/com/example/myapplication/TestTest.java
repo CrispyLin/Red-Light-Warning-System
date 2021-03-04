@@ -30,7 +30,7 @@ public class TestTest
     {
         ParseArguments(args);
 
-        String loginURL = "http://216.151.19.133:5832/APhA/Services/Login?";
+        String loginURL = "http://38.103.174.3:5832/APhA/Services/Login?";
 
         String params = "username=" + Username + "&password=" + Password;
 
@@ -50,7 +50,7 @@ public class TestTest
             return;
         }
         session_code = sessionCode;
-        String geoReferenceURL = "http://216.151.19.133:5832/APhA/Services/GeoReferencedPredictions?sessionCode=" + sessionCode + "&latitude=45.524868&longitude=-122.694144&heading=85&includeTopology=yes&asTurns=yes&includePermissives=no&includeAmber=no&bearingType=Compass&matchingMode=TTSDefault&version=1.0.10&returnJSON=yes";
+        String geoReferenceURL = "http://38.103.174.3:5832/APhA/Services/GeoReferencedPredictions?sessionCode=" + sessionCode + "&latitude=45.524868&longitude=-122.694144&heading=85&includeTopology=yes&asTurns=yes&includePermissives=no&includeAmber=no&bearingType=Compass&matchingMode=TTSDefault&version=1.0.10&returnJSON=yes";
 
         String geoReferenceResponse = GetStringFromURLRequest(geoReferenceURL);
     }
@@ -71,7 +71,6 @@ public class TestTest
         thread.start();
         thread.join();
         return geoReferenceResponse[0];
-
     }
 
     public static String GetStringFromURLRequest(String url) throws Exception

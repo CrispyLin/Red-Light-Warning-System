@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.util.Log;
+import java.util.Date;
 
 public class Algorithm {
     //we will do the algorithm here
@@ -10,6 +11,10 @@ public class Algorithm {
     //which has the information about the SmallestTimeToChange to what kind of color
     private String color;
     private int smallestPhaseIndex;
+    private long previousTime=0;
+    private long warningInterval = 5000; //the time period between two warning is set here
+    private int minDistanceToStopLine = 20;
+    private int maxDistanceToStopLine = 1000;
 
     //setter method
     public void set(Prediction p, double s){
@@ -62,9 +67,51 @@ public class Algorithm {
         return smallestTimeToChange;
     }
 
+    //create a new thread to display warning every 5 seconds by calculating time interval to limit the warning frequency.
+    //if driver is too far or too close the intersection, stop display warnings
+    public void ToCompare() throws Exception
+    {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try  {
+                    //get current time
+                    Date date = new Date();
+                    //This method returns the time in millis
+                    long currentTimeInMs = date.getTime();
+                    long TimeInterval = currentTimeInMs - previousTime;
+                    //if the time between now and last warning is greater than the Max Interval we set
+                    //and the car is not too far or too close to the stopline
+                    //do the comparation
+                    double distanceToStopLine = prediction.data.data.items[0].intersections.items[0].Topology.DistanceToStopLine;
+                    if(TimeInterval > warningInterval && distanceToStopLine > minDistanceToStopLine && distanceToStopLine < maxDistanceToStopLine) {
+                        compareTwoTimes();
+                        previousTime = currentTimeInMs;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
+        thread.join();
+    }
+
+    //this method will look for the first green bulb in the predictiveChanges of smallestPhaseIndex, and return index
+    public int searchGreenLight(){
+        for(int i=0; i<prediction.data.data.items[0].intersections.items[0].phases.items[smallestPhaseIndex].PredictiveChanges.Items.length;i++){
+            if(prediction.data.data.items[0].intersections.items[0].phases.items[smallestPhaseIndex].PredictiveChanges.Items[i].BulbColor.equals("Green")){
+                return i;
+            }
+        }
+        return -1;//return negative value to indicate green bulb not existing
+    }
+
     //this method will compare time to stopline and the time to change for the traffic signal, and display warnings
     //Assume Amber means the color of bulb is going to change
     public void compareTwoTimes(){
+        if(prediction.data.data.items.length==0)
+            return;
         double timeToStopLine = calculateTimeToStopLine();
         double smallestTimeToChange = getSmallestTimeToChange();
         //handling currently red bulb
@@ -75,21 +122,34 @@ public class Algorithm {
                     if (timeToStopLine <= smallestTimeToChange + 3) {
                         Log.i("Warning", "slow down, or you will encounter Red light or Amber light");
                     }
-                } else if (prediction.data.data.items[0].intersections.items[0].phases.items[smallestPhaseIndex].PredictiveChanges.Items[0].BulbColor.equals("Red")) {
+                }
+                else if(prediction.data.data.items[0].intersections.items[0].phases.items[smallestPhaseIndex].PredictiveChanges.Items[0].BulbColor.equals("Green")){
+                    //current Red, but next will be Green
+                    //so if driver will arrive the stopline before bulb turns green, we warn driver to slow down
+                    int timeToChangeOfNextGreen = prediction.data.data.items[0].intersections.items[0].phases.items[smallestPhaseIndex].PredictiveChanges.Items[0].TimeToChange;
+                    if(timeToStopLine < timeToChangeOfNextGreen){
+                        Log.i("Warning", "slow down, or you will encounter red or Amber light");
+                    }
+                }
+                else if (prediction.data.data.items[0].intersections.items[0].phases.items[smallestPhaseIndex].PredictiveChanges.Items[0].BulbColor.equals("Red")) {
                     //current red but next will be red.
                     Log.i("Warning", "slow down, or you will encounter red light");
                 }
                 break;
             //handling currently Amber bulb
             case "Amber":
-                if (prediction.data.data.items[0].intersections.items[0].phases.items[smallestPhaseIndex].PredictiveChanges.Items[0].BulbColor.equals("Green")) {
-                    //currently Amber, but next will be Green
-                    if (timeToStopLine <= smallestTimeToChange) {
-                        Log.i("Warning", "slow down, or you will encounter Amber light");
+                //current Amber, then next one has to be Red
+                if(prediction.data.data.items[0].intersections.items[0].phases.items[smallestPhaseIndex].PredictiveChanges.Items[0].BulbColor.equals("Red")){
+                    int greenIndex = searchGreenLight();
+                    if(greenIndex < 0){
+                        //this means GreenLight does not exist in the predictiveChanges
+                        Log.i("Warning", "slow down, or you will encounter Amber or Red light");
                     }
-                } else if (prediction.data.data.items[0].intersections.items[0].phases.items[smallestPhaseIndex].PredictiveChanges.Items[0].BulbColor.equals("Red")) {
-                    //current Amber, but next will be Red
-                    Log.i("Warning", "slow down, or you will encounter Amber or Red light");
+                    int timeToChangeOfNextGreenLight = prediction.data.data.items[0].intersections.items[0].phases.items[smallestPhaseIndex].PredictiveChanges.Items[greenIndex].TimeToChange;
+                    if(timeToStopLine < timeToChangeOfNextGreenLight){
+                        //if driver arrive stopline before the bulb turns green, warn driver to slow down
+                        Log.i("Warning", "slow down, or you will encounter Amber or Red light");
+                    }
                 }
                 break;
             //handling currently Green Bulb
@@ -101,10 +161,11 @@ public class Algorithm {
                     }
                 } else if (prediction.data.data.items[0].intersections.items[0].phases.items[smallestPhaseIndex].PredictiveChanges.Items[0].BulbColor.equals("Green")) {
                     //current Green, but next will be Green as well
-                    Log.i("Warning", "Speed up");
+                    //do nothing
                 }
                 break;
         }
     }
+
 }
 
