@@ -13,7 +13,7 @@ public class Algorithm {
     private int smallestPhaseIndex;
     private long previousTime=0;
     private long warningInterval = 5000; //the time period between two warning is set here
-    private int minDistanceToStopLine = 20;
+    private int minDistanceToStopLine = 5;
     private int maxDistanceToStopLine = 1000;
 
     //setter method
@@ -110,10 +110,15 @@ public class Algorithm {
     //this method will compare time to stopline and the time to change for the traffic signal, and display warnings
     //Assume Amber means the color of bulb is going to change
     public void compareTwoTimes(){
-        if(prediction.data.data.items.length==0)
+        //handle errors here
+        //1. if prediction's data field is empty, return
+        //2. if prediction's intersection field is empty, return
+        //3. if prediction's phase field is empty, return
+        if(prediction.data.data.items.length==0 || prediction.data.data.items[0].intersections.items.length==0 || prediction.data.data.items[0].intersections.items[0].phases.items.length==0)
             return;
         double timeToStopLine = calculateTimeToStopLine();
         double smallestTimeToChange = getSmallestTimeToChange();
+        Log.i("Warning", "current speed is: "+speed);
         //handling currently red bulb
         switch (prediction.data.data.items[0].intersections.items[0].phases.items[smallestPhaseIndex].BulbColor) {
             case "Red":
