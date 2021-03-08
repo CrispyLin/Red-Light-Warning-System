@@ -32,11 +32,14 @@ import org.json.JSONObject;
 
 
 public class GeoReferenced_web_request extends AppCompatActivity {
+    // private variables
     private TextView textView_longitude;
     private TextView textView_latitude;
     private TextView textView_heading;
+    private TextView textView_speed;
     private String longitude, latitude, heading;
-    private static double speed;
+    private double speed = 0.0;
+    private Algorithm algorithm = new Algorithm();
     //two objs to use GPS service
     private LocationManager locationManager;
     private LocationListener locationListener;
@@ -56,13 +59,10 @@ public class GeoReferenced_web_request extends AppCompatActivity {
             show_session_code.setText(session_code);
         }
 
-
-        // private variables
-        //The button will send request to the TTS server upon click
-        Button btn = (Button) findViewById(R.id.Btn_request);
         textView_latitude = (TextView) findViewById(R.id.textView_latitude);
         textView_longitude = (TextView) findViewById(R.id.textView_longitude);
         textView_heading = (TextView) findViewById(R.id.textView_heading);
+        textView_speed = (TextView) findViewById(R.id.textView_speed);
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
@@ -74,11 +74,13 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                 latitude = String.valueOf(location.getLatitude());
                 heading = String.valueOf(location.getBearing());
                 //Get the speed if it is available, in meters/second over ground.
-                //String.valueOf(location.getSpeed()) returns speed in string, parse it will get a double value.
                 speed = Double.parseDouble(String.valueOf(location.getSpeed()));
+                //String.valueOf(location.getSpeed()) returns speed in string, parse it will get a double value.
                 textView_longitude.setText(longitude);
                 textView_latitude.setText(latitude);
                 textView_heading.setText(heading);
+                textView_speed.setText(speed+"");
+                sendLocationAndAlgorithm();
             }
 
             @Override
@@ -89,35 +91,31 @@ public class GeoReferenced_web_request extends AppCompatActivity {
         };
 
         //start getting GPS locations
-
         requestGPS();
+    }
 
-        //when the btn is triggered, the program starts to send GET request to the TTS's server and receive response from the TTS server
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String geoReferenceURL = "http://38.103.174.3:5832/APhA/Services/GeoReferencedPredictions?sessionCode=" + session_code + "&latitude=" + latitude + "&longitude=" + longitude + "&heading=" + heading + "&includeTopology=yes&asTurns=yes&includePermissives=no&includeAmber=no&bearingType=Compass&matchingMode=TTSDefault&version=1.0.10&returnJSON=yes";
-                String TTS_response = "";
-                try {
-                    TTS_response = TestTest.SendInputs(geoReferenceURL);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return;
-                }
-                //TTS_RESPONSE
-                if(!TTS_response.equals("")) {
-                    Gson gson = new Gson();
-                    prediction = gson.fromJson(TTS_response, Prediction.class);
-                    Algorithm algorithm = new Algorithm();
-                    algorithm.set(prediction, speed);
-                    try {
-                        algorithm.ToCompare();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
+    //This method will send GET request to the TTS's server and receive response from the TTS server
+    //and based on the response, using algorithm to decide if a warning needed
+    private void sendLocationAndAlgorithm(){
+        String geoReferenceURL = "http://38.103.174.3:5832/APhA/Services/GeoReferencedPredictions?sessionCode=" + session_code + "&latitude=" + latitude + "&longitude=" + longitude + "&heading=" + heading + "&includeTopology=yes&asTurns=yes&includePermissives=no&includeAmber=no&bearingType=Compass&matchingMode=TTSDefault&version=1.0.10&returnJSON=yes";
+        String TTS_response = "";
+        try {
+            TTS_response = TestTest.SendInputs(geoReferenceURL);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+        //TTS_RESPONSE
+        if(!TTS_response.equals("")) {
+            Gson gson = new Gson();
+            prediction = gson.fromJson(TTS_response, Prediction.class);
+            algorithm.set(prediction, speed);
+            try {
+                algorithm.ToCompare();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
+        }
     }
 
     @Override
@@ -130,7 +128,6 @@ public class GeoReferenced_web_request extends AppCompatActivity {
 
     private void requestGPS() {
         // first check for permissions
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.INTERNET}
@@ -140,7 +137,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
         }
         // this code won't execute IF permissions are not allowed, because in the line above there is return statement.
         // request for GPS location
-        locationManager.requestLocationUpdates("gps", 1000, 0, locationListener);
+        locationManager.requestLocationUpdates("gps", 500, 0, locationListener);
     }
 
     @Override
