@@ -1,5 +1,9 @@
 package com.example.myapplication;
 
+import android.content.Context;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.util.Log;
 import java.util.Date;
 
@@ -15,13 +19,15 @@ public class Algorithm {
     private long warningInterval = 5000; //the time period between two warning is set here
     private int minDistanceToStopLine = 5;
     private int maxDistanceToStopLine = 1000;
-
+    private Ringtone r;
     //setter method
-    public void set(Prediction p, double s){
+    public void set(Prediction p, double s, Context context)  {
         prediction = p;
         speed = s;
         color = "";
-    }
+        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        r = RingtoneManager.getRingtone(context.getApplicationContext(), notification);
+        }
 
     //this method will calculate the time needed for the car in current speed to the nearest stop line
     public double calculateTimeToStopLine(){
@@ -108,6 +114,8 @@ public class Algorithm {
         thread.join();
     }
 
+
+
     //this method will look for the first green bulb in the predictiveChanges of smallestPhaseIndex, and return index
     public int searchGreenLight(){
         for(int i=0; i<prediction.data.data.items[0].intersections.items[0].phases.items[smallestPhaseIndex].PredictiveChanges.Items.length;i++){
@@ -129,6 +137,12 @@ public class Algorithm {
                 if (prediction.data.data.items[0].intersections.items[0].phases.items[smallestPhaseIndex].PredictiveChanges.Items[0].BulbColor.equals("Amber")) {
                     //current red but next will be Amber, which mean the bulb is changing to green, check if user arrives stopline too early
                     if (timeToStopLine <= smallestTimeToChange + 3) {
+                        try {
+                            r.play();
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         Log.i("Warning", "slow down, or you will encounter Red light or Amber light");
                     }
                 }
@@ -142,6 +156,12 @@ public class Algorithm {
                 }
                 else if (prediction.data.data.items[0].intersections.items[0].phases.items[smallestPhaseIndex].PredictiveChanges.Items[0].BulbColor.equals("Red")) {
                     //current red but next will be red.
+                    try {
+                        r.play();
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     Log.i("Warning", "slow down, or you will encounter red light");
                 }
                 break;
@@ -157,6 +177,13 @@ public class Algorithm {
                     int timeToChangeOfNextGreenLight = prediction.data.data.items[0].intersections.items[0].phases.items[smallestPhaseIndex].PredictiveChanges.Items[greenIndex].TimeToChange;
                     if(timeToStopLine < timeToChangeOfNextGreenLight){
                         //if driver arrive stopline before the bulb turns green, warn driver to slow down
+                        try {
+                            r.play();
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
                         Log.i("Warning", "slow down, or you will encounter Amber or Red light");
                     }
                 }

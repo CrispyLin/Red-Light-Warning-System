@@ -80,7 +80,11 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                 textView_latitude.setText(latitude);
                 textView_heading.setText(heading);
                 textView_speed.setText(speed+"");
-                sendLocationAndAlgorithm();
+                try {
+                    sendLocationAndAlgorithm();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -96,7 +100,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
 
     //This method will send GET request to the TTS's server and receive response from the TTS server
     //and based on the response, using algorithm to decide if a warning needed
-    private void sendLocationAndAlgorithm(){
+    private void sendLocationAndAlgorithm() throws InterruptedException {
         String geoReferenceURL = "http://38.103.174.3:5832/APhA/Services/GeoReferencedPredictions?sessionCode=" + session_code + "&latitude=" + latitude + "&longitude=" + longitude + "&heading=" + heading + "&includeTopology=yes&asTurns=yes&includePermissives=no&includeAmber=no&bearingType=Compass&matchingMode=TTSDefault&version=1.0.10&returnJSON=yes";
         String TTS_response = "";
         try {
@@ -109,7 +113,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
         if(!TTS_response.equals("")) {
             Gson gson = new Gson();
             prediction = gson.fromJson(TTS_response, Prediction.class);
-            algorithm.set(prediction, speed);
+            algorithm.set(prediction, speed, this);
             try {
                 algorithm.ToCompare();
             } catch (Exception e) {
