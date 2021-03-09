@@ -1,9 +1,6 @@
 package com.example.myapplication;
 
-import android.content.Context;
 import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.util.Log;
 import java.util.Date;
 
@@ -19,14 +16,13 @@ public class Algorithm {
     private long warningInterval = 5000; //the time period between two warning is set here
     private int minDistanceToStopLine = 5;
     private int maxDistanceToStopLine = 1000;
-    private Ringtone r;
+    private Ringtone alarm;
     //setter method
-    public void set(Prediction p, double s, Context context)  {
+    public void set(Prediction p, double s, Ringtone r)  {
         prediction = p;
         speed = s;
         color = "";
-        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        r = RingtoneManager.getRingtone(context.getApplicationContext(), notification);
+        alarm = r;
         }
 
     //this method will calculate the time needed for the car in current speed to the nearest stop line
@@ -138,7 +134,7 @@ public class Algorithm {
                     //current red but next will be Amber, which mean the bulb is changing to green, check if user arrives stopline too early
                     if (timeToStopLine <= smallestTimeToChange + 3) {
                         try {
-                            r.play();
+                            alarm.play();
                         }
                         catch (Exception e) {
                             e.printStackTrace();
@@ -157,7 +153,7 @@ public class Algorithm {
                 else if (prediction.data.data.items[0].intersections.items[0].phases.items[smallestPhaseIndex].PredictiveChanges.Items[0].BulbColor.equals("Red")) {
                     //current red but next will be red.
                     try {
-                        r.play();
+                        alarm.play();
                     }
                     catch (Exception e) {
                         e.printStackTrace();
@@ -178,7 +174,7 @@ public class Algorithm {
                     if(timeToStopLine < timeToChangeOfNextGreenLight){
                         //if driver arrive stopline before the bulb turns green, warn driver to slow down
                         try {
-                            r.play();
+                            alarm.play();
                         }
                         catch (Exception e) {
                             e.printStackTrace();

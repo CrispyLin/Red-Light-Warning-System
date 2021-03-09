@@ -1,5 +1,8 @@
 package com.example.myapplication;
 
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -46,12 +49,19 @@ public class GeoReferenced_web_request extends AppCompatActivity {
     private String session_code;
     private JSONObject json_data;
     private Prediction prediction;
+    private Ringtone r;
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_geo_referenced_web_request);
+
+        //get warning sound
+        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        r = RingtoneManager.getRingtone(this.getApplicationContext(), notification);
+
         //get session_code from previous activity
         if (getIntent().hasExtra("session_code")) {
             TextView show_session_code = (TextView) findViewById(R.id.textView_Sessioncode);
@@ -113,7 +123,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
         if(!TTS_response.equals("")) {
             Gson gson = new Gson();
             prediction = gson.fromJson(TTS_response, Prediction.class);
-            algorithm.set(prediction, speed, this);
+            algorithm.set(prediction, speed, r);
             try {
                 algorithm.ToCompare();
             } catch (Exception e) {
