@@ -134,7 +134,7 @@
 
         </LinearLayout>
 
-        <TextView
+        <Button
             android:id="@+id/toLogin"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -165,4 +165,6 @@
 
 
     </LinearLayout>
+
+
 </LinearLayout>
