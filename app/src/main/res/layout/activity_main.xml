@@ -54,7 +54,7 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/inputName"
+                android:id="@+id/inputUsername"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="10dp"
@@ -85,13 +85,12 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/inputName2"
+                android:id="@+id/editTextPassword"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginTop="10dp"
                 android:background="@drawable/shape_dialog_bottom_top"
-
-
+                android:ems="10"
+                android:inputType="textPassword"
                 android:textColor="#43496A"
                 android:textColorHint="#bbbbbb"
                 android:textSize="14sp" />
@@ -135,7 +134,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/toLogin"
+            android:id="@+id/buttonLogin"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_centerInParent="true"

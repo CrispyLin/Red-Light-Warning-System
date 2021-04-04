@@ -53,12 +53,12 @@ public class MainActivity extends AppCompatActivity {
         }
         private void login(SharedPreferences sharedPreferences){
             setContentView(R.layout.activity_main);
-            Button Btn_Login = (Button) findViewById(R.id.toLogin);
+            Button Btn_Login = (Button) findViewById(R.id.buttonLogin);
             Btn_Login.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    EditText editText_Username = (EditText) findViewById(R.id.inputName);
-                    EditText editText_Password = (EditText) findViewById(R.id.inputName);
+                    EditText editText_Username = (EditText) findViewById(R.id.inputUsername);
+                    EditText editText_Password = (EditText) findViewById(R.id.editTextPassword);
 
                     String username = editText_Username.getText().toString();
                     String password = editText_Password.getText().toString();
