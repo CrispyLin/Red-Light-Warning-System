@@ -15,8 +15,8 @@
         />-->
     <!-- 渐变效果    起始颜色    结束的颜色    渐变的角度   角度  是45整数倍 -->
     <gradient
-        android:startColor="#ffffff"
-        android:endColor="#ffffff"
+        android:startColor="#ADADAD"
+        android:endColor="#ADADAD"
         android:angle="45"
         />
 </shape>

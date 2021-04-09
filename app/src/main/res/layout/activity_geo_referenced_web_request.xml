@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#565656">
@@ -17,25 +17,24 @@
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:layout_marginLeft="60dp"
             android:layout_marginRight="60dp"
+            android:background="@mipmap/sd"
             android:ellipsize="end"
             android:gravity="center"
-            android:layout_centerInParent="true"
             android:singleLine="true"
-            android:background="@mipmap/sd"
-            android:textStyle="bold"
-
             android:textColor="#9AFF02"
-            android:textSize="22sp" />
+
+            android:textSize="22sp"
+            android:textStyle="bold" />
 
 
     </RelativeLayout>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        >
+        android:layout_height="70dp">
 
 
         <TextView
@@ -46,167 +45,282 @@
             android:layout_marginRight="60dp"
             android:ellipsize="end"
             android:gravity="center"
-            android:singleLine="true" android:textStyle="bold"
+            android:singleLine="true"
             android:text="trip"
             android:textColor="#000"
-            android:textSize="22sp" />
+            android:textSize="22sp"
+            android:textStyle="bold" />
 
 
     </RelativeLayout>
 
-    <LinearLayout
-
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="20dp"
-        android:orientation="vertical">
+        android:layout_marginBottom="20dp">
+
         <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="24dp"
-            android:visibility="gone"
-            android:paddingRight="24dp">
 
+            android:orientation="vertical">
 
-
-            <TextView
-                android:id="@+id/textView_Sessioncode"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/shape_dialog_bottom_top"
-
-
-                android:textColor="#43496A"
-                android:textColorHint="#bbbbbb"
-                android:textSize="14sp" />
-
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="24dp"            android:layout_marginTop="15dp"
-            android:paddingRight="24dp">
-
-
-
-            <TextView
-                android:id="@+id/textView_latitude"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/shape_dialog_bottom_top"
-
-
-                android:textColor="#43496A"
-                android:textColorHint="#bbbbbb"
-                android:textSize="14sp" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:orientation="vertical"
-            android:paddingLeft="24dp"
-            android:paddingRight="24dp">
-
-
-            <TextView
-                android:id="@+id/textView_longitude"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/shape_dialog_bottom_top"
-
-
-                android:textColor="#43496A"
-                android:textColorHint="#bbbbbb"
-                android:textSize="14sp" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:orientation="vertical"
-            android:paddingLeft="24dp"
-            android:paddingRight="24dp">
-
-
-            <TextView
-                android:id="@+id/textView_heading"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/shape_dialog_bottom_top"
-
-
-                android:textColor="#43496A"
-                android:textColorHint="#bbbbbb"
-                android:textSize="14sp" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:orientation="vertical"
-            android:paddingLeft="24dp"
-            android:paddingRight="24dp">
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="speed"
-                android:textColor="#fff"
-                android:textSize="20sp" />
+                android:orientation="vertical"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:visibility="gone">
 
-            <TextView
-                android:id="@+id/textView_speed"
 
+                <TextView
+                    android:id="@+id/textView_Sessioncode"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/shape_dialog_bottom_top"
+
+
+                    android:textColor="#43496A"
+                    android:textColorHint="#bbbbbb"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Longitude"
+                    android:textColor="#fff"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textView_latitude"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/shape_dialog_bottom_top"
+
+
+                    android:textColor="#fff"
+                    android:textColorHint="#bbbbbb"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Latitude"
+                    android:textColor="#fff"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textView_longitude"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/shape_dialog_bottom_top"
+
+
+                    android:textColor="#fff"
+                    android:textColorHint="#bbbbbb"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bearing"
+                    android:textColor="#fff"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textView_heading"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/shape_dialog_bottom_top"
+
+
+                    android:textColor="#fff"
+                    android:textColorHint="#bbbbbb"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Current phases and bulbs"
+                    android:textColor="#fff"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textView_speed"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/shape_dialog_bottom_top"
+
+
+                    android:textColor="#fff"
+                    android:textColorHint="#bbbbbb"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Distance To Stopline"
+                    android:textColor="#fff"
+                    android:textSize="20sp" />
+
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/shape_dialog_bottom_top"
+
+
+                    android:textColor="#fff"
+                    android:textColorHint="#bbbbbb"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Current At/On street"
+                    android:textColor="#fff"
+                    android:textSize="20sp" />
+
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/shape_dialog_bottom_top"
+
+
+                    android:textColor="#fff"
+                    android:textColorHint="#bbbbbb"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Speed"
+                    android:textColor="#fff"
+                    android:textSize="20sp" />
+
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/shape_dialog_bottom_top"
+
+
+                    android:textColor="#fff"
+                    android:textColorHint="#bbbbbb"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/buttonLogin"
+                android:layout_width="250dp"
+
+
                 android:layout_height="40dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/shape_dialog_bottom_top"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="30dp"
 
-
-                android:textColor="#43496A"
-                android:textColorHint="#bbbbbb"
-                android:textSize="14sp" />
+                android:layout_marginRight="24dp"
+                android:background="#BFBFB5"
+                android:gravity="center"
+                android:text="Log out"
+                android:textColor="#9AFF02"
+                android:textSize="16sp" />
 
 
         </LinearLayout>
-
-
-
-
-        <TextView
-            android:id="@+id/toLogin"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="24dp"
-            android:background="#BFBFB5"
-            android:gravity="center"
-            android:text="Log out"
-            android:textColor="#9AFF02"
-            android:textSize="16sp" />
-
-
-
-
-
-    </LinearLayout>
+    </ScrollView>
 </LinearLayout>

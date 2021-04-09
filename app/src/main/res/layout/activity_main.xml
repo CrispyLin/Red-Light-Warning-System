@@ -35,8 +35,9 @@
     <LinearLayout
 
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="100dp"
+        android:layout_marginBottom="30dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -54,14 +55,14 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/inputName"
+                android:id="@+id/inputUsername"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/shape_dialog_bottom_top"
 
 
-                android:textColor="#43496A"
+                android:textColor="#fff"
                 android:textColorHint="#bbbbbb"
                 android:textSize="14sp" />
 
@@ -85,14 +86,13 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/inputName2"
+                android:id="@+id/editTextPassword"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginTop="10dp"
                 android:background="@drawable/shape_dialog_bottom_top"
-
-
-                android:textColor="#43496A"
+                android:ems="10"
+                android:inputType="textPassword"
+                android:textColor="#fff"
                 android:textColorHint="#bbbbbb"
                 android:textSize="14sp" />
 
@@ -134,8 +134,8 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/toLogin"
+        <Button
+            android:id="@+id/buttonLogin"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_centerInParent="true"
@@ -153,11 +153,12 @@
             android:id="@+id/tv_register"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_centerInParent="true"
+
             android:layout_marginLeft="24dp"
             android:layout_marginTop="30dp"
             android:layout_marginRight="24dp"
-
+            android:layout_marginBottom="20dp"
+            android:background="#3D3D3D"
             android:gravity="center"
             android:text="sign up"
             android:textColor="#9AFF02"
@@ -165,4 +166,6 @@
 
 
     </LinearLayout>
+
+
 </LinearLayout>
