@@ -303,7 +303,7 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/buttonLogin"
+                android:id="@+id/toLogout"
                 android:layout_width="250dp"
 
 

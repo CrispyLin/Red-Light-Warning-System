@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.content.SharedPreferences;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -50,13 +51,14 @@ public class GeoReferenced_web_request extends AppCompatActivity {
     private JSONObject json_data;
     private Prediction prediction;
     private Ringtone r;
-
+    private SharedPreferences sharedPreferences;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_geo_referenced_web_request);
+        sharedPreferences = getSharedPreferences("login_info", MODE_PRIVATE);
 
         //get warning sound
         Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -103,6 +105,25 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                 startActivity(intent);
             }
         };
+
+        Button Btn_Logout = (Button) findViewById(R.id.toLogout);
+        Btn_Logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.remove("username");
+                editor.remove("password");
+                editor.commit();
+                Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(startIntent);
+            }
+
+        });
+
+
+
+
+
 
         //start getting GPS locations
         requestGPS();
