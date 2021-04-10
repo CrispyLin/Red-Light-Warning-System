@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#3D3D3D"
@@ -70,30 +71,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingLeft="24dp"
-                android:paddingRight="24dp"
-                android:visibility="gone">
-
-
-                <TextView
-                    android:id="@+id/textView_Sessioncode"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/shape_dialog_bottom_top"
-
-
-                    android:textColor="#43496A"
-                    android:textColorHint="#bbbbbb"
-                    android:textSize="14sp" />
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:orientation="vertical"
                 android:paddingLeft="24dp"
@@ -107,7 +84,7 @@
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/textView_latitude"
+                    android:id="@+id/textVIew_longitude"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginTop="10dp"
@@ -137,7 +114,7 @@
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/textView_longitude"
+                    android:id="@+id/textVIew_latitude"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginTop="10dp"
@@ -197,7 +174,7 @@
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/textView_speed"
+                    android:id="@+id/textView_straightBulb"
 
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
@@ -229,12 +206,13 @@
 
                 <TextView
 
+                    android:id="@+id/textView_DTS"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginTop="10dp"
+
+
                     android:background="@drawable/shape_dialog_bottom_top"
-
-
                     android:textColor="#fff"
                     android:textColorHint="#bbbbbb"
                     android:textSize="14sp" />
@@ -259,12 +237,13 @@
 
                 <TextView
 
+                    android:id="@+id/textView_currentStreet"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginTop="10dp"
+
+
                     android:background="@drawable/shape_dialog_bottom_top"
-
-
                     android:textColor="#fff"
                     android:textColorHint="#bbbbbb"
                     android:textSize="14sp" />
@@ -289,12 +268,13 @@
 
                 <TextView
 
+                    android:id="@+id/textView_speed"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
+
+
                     android:layout_marginTop="10dp"
                     android:background="@drawable/shape_dialog_bottom_top"
-
-
                     android:textColor="#fff"
                     android:textColorHint="#bbbbbb"
                     android:textSize="14sp" />
