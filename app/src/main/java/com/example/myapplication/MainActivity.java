@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //mulclight_data = new Prediction();
-        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("login_info", MODE_PRIVATE);
         if (sharedPreferences.getString("username", "null") != "null") {
             String username = sharedPreferences.getString("username", "null");
             String password = sharedPreferences.getString("password", "null");

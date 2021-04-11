@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#3D3D3D"
@@ -71,6 +72,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+<<<<<<< HEAD
                 android:orientation="vertical"
                 android:paddingLeft="24dp"
                 android:paddingRight="24dp"
@@ -96,6 +98,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
+=======
+                android:layout_marginTop="15dp"
+>>>>>>> e195f3e087d61863f3166e4d8902a87480313adf
                 android:orientation="vertical"
                 android:paddingLeft="24dp"
                 android:paddingRight="24dp">
@@ -110,7 +115,35 @@
                     android:layout_height="wrap_content"
                     android:text="Longitude,"
                     android:textColor="#fff"
+<<<<<<< HEAD
                     android:textSize="18sp" />
+=======
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textVIew_longitude"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/shape_dialog_bottom_top"
+
+
+                    android:textColor="#fff"
+                    android:textColorHint="#bbbbbb"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp">
+
+>>>>>>> e195f3e087d61863f3166e4d8902a87480313adf
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -118,7 +151,11 @@
                     android:textColor="#fff"
                     android:textSize="18sp" /></LinearLayout>
                 <TextView
+<<<<<<< HEAD
                     android:id="@+id/textView_latitude"
+=======
+                    android:id="@+id/textVIew_latitude"
+>>>>>>> e195f3e087d61863f3166e4d8902a87480313adf
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginTop="5dp"
@@ -180,7 +217,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/textView_speed"
+                    android:id="@+id/textView_straightBulb"
 
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
@@ -212,12 +249,18 @@
 
                 <TextView
 
+                    android:id="@+id/textView_DTS"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
+<<<<<<< HEAD
                     android:layout_marginTop="5dp"
                     android:background="@drawable/shape_dialog_bottom_top"
+=======
+                    android:layout_marginTop="10dp"
+>>>>>>> e195f3e087d61863f3166e4d8902a87480313adf
 
 
+                    android:background="@drawable/shape_dialog_bottom_top"
                     android:textColor="#fff"
                     android:textColorHint="#bbbbbb"
                     android:textSize="14sp" />
@@ -242,12 +285,18 @@
 
                 <TextView
 
+                    android:id="@+id/textView_currentStreet"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
+<<<<<<< HEAD
                     android:layout_marginTop="5dp"
                     android:background="@drawable/shape_dialog_bottom_top"
+=======
+                    android:layout_marginTop="10dp"
+>>>>>>> e195f3e087d61863f3166e4d8902a87480313adf
 
 
+                    android:background="@drawable/shape_dialog_bottom_top"
                     android:textColor="#fff"
                     android:textColorHint="#bbbbbb"
                     android:textSize="14sp" />
@@ -272,12 +321,18 @@
 
                 <TextView
 
+                    android:id="@+id/textView_speed"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
+<<<<<<< HEAD
                     android:layout_marginTop="5dp"
                     android:background="@drawable/shape_dialog_bottom_top"
+=======
+>>>>>>> e195f3e087d61863f3166e4d8902a87480313adf
 
 
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/shape_dialog_bottom_top"
                     android:textColor="#fff"
                     android:textColorHint="#bbbbbb"
                     android:textSize="14sp" />
@@ -286,7 +341,7 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/buttonLogin"
+                android:id="@+id/toLogout"
                 android:layout_width="250dp"
 
 
