@@ -103,13 +103,14 @@ public class GeoReferenced_web_request extends AppCompatActivity {
             }
         };
 
-        Button Btn_Logout = (Button) findViewById(R.id.button_logIn);
+        Button Btn_Logout = (Button) findViewById(R.id.layout_geoReference);
         Btn_Logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.remove("username");
                 editor.remove("password");
+                editor.remove("IP");
                 editor.commit();
                 Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(startIntent);
