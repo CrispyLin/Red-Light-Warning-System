@@ -34,7 +34,6 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:visibility="gone"
         android:layout_height="70dp">
 
 
@@ -58,8 +57,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp">
 
         <LinearLayout
 
@@ -95,33 +94,23 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
+                android:layout_marginTop="15dp"
                 android:orientation="vertical"
                 android:paddingLeft="24dp"
                 android:paddingRight="24dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
 
-                    android:orientation="horizontal"
-                   >
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Longitude,"
+                    android:text="Longitude"
                     android:textColor="#fff"
-                    android:textSize="18sp" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Latitude"
-                    android:textColor="#fff"
-                    android:textSize="18sp" /></LinearLayout>
+                    android:textSize="20sp" />
+
                 <TextView
                     android:id="@+id/textView_latitude"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/shape_dialog_bottom_top"
 
 
@@ -132,7 +121,35 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Latitude"
+                    android:textColor="#fff"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textView_longitude"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/shape_dialog_bottom_top"
+
+
+                    android:textColor="#fff"
+                    android:textColorHint="#bbbbbb"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -147,13 +164,13 @@
                     android:layout_height="wrap_content"
                     android:text="Bearing"
                     android:textColor="#fff"
-                    android:textSize="18sp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/textView_heading"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/shape_dialog_bottom_top"
 
 
@@ -177,14 +194,14 @@
                     android:layout_height="wrap_content"
                     android:text="Current phases and bulbs"
                     android:textColor="#fff"
-                    android:textSize="18sp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/textView_speed"
 
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/shape_dialog_bottom_top"
 
 
@@ -208,13 +225,13 @@
                     android:layout_height="wrap_content"
                     android:text="Distance To Stopline"
                     android:textColor="#fff"
-                    android:textSize="18sp" />
+                    android:textSize="20sp" />
 
                 <TextView
 
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/shape_dialog_bottom_top"
 
 
@@ -238,13 +255,13 @@
                     android:layout_height="wrap_content"
                     android:text="Current At/On street"
                     android:textColor="#fff"
-                    android:textSize="18sp" />
+                    android:textSize="20sp" />
 
                 <TextView
 
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/shape_dialog_bottom_top"
 
 
@@ -268,13 +285,13 @@
                     android:layout_height="wrap_content"
                     android:text="Speed"
                     android:textColor="#fff"
-                    android:textSize="18sp" />
+                    android:textSize="20sp" />
 
                 <TextView
 
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/shape_dialog_bottom_top"
 
 
@@ -294,7 +311,7 @@
                 android:layout_centerInParent="true"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="24dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="30dp"
 
                 android:layout_marginRight="24dp"
                 android:background="#BFBFB5"
