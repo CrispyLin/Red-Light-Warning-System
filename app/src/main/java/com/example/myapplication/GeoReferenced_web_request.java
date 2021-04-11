@@ -1,11 +1,10 @@
 package com.example.myapplication;
 
+import android.content.SharedPreferences;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 
 
@@ -23,23 +22,22 @@ import android.provider.Settings;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.google.gson.Gson;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 
 public class GeoReferenced_web_request extends AppCompatActivity {
     // private variables
-    private TextView textView_longitude;
-    private TextView textView_latitude;
+    private TextView textView_coordinate;
     private TextView textView_heading;
     private TextView textView_speed;
+    private TextView textView_bulb;
+    private TextView textView_DTS;
+    private TextView textView_street;
+
     private String longitude, latitude, heading;
     private double speed = 0.0;
     private Algorithm algorithm = new Algorithm();
@@ -47,16 +45,17 @@ public class GeoReferenced_web_request extends AppCompatActivity {
     private LocationManager locationManager;
     private LocationListener locationListener;
     private String session_code;
-    private JSONObject json_data;
+    //private JSONObject json_data;
     private Prediction prediction;
     private Ringtone r;
-
+    private SharedPreferences sharedPreferences;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_geo_referenced_web_request);
+        sharedPreferences = getSharedPreferences("login_info", MODE_PRIVATE);
 
         //get warning sound
         Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -64,15 +63,15 @@ public class GeoReferenced_web_request extends AppCompatActivity {
 
         //get session_code from previous activity
         if (getIntent().hasExtra("session_code")) {
-            TextView show_session_code = (TextView) findViewById(R.id.textView_Sessioncode);
             session_code = getIntent().getExtras().getString("session_code");
-            show_session_code.setText(session_code);
         }
 
-        textView_latitude = (TextView) findViewById(R.id.textView_latitude);
-        textView_longitude = (TextView) findViewById(R.id.textView_longitude);
+        textView_coordinate = (TextView) findViewById(R.id.textView_coordinate);
         textView_heading = (TextView) findViewById(R.id.textView_heading);
         textView_speed = (TextView) findViewById(R.id.textView_speed);
+        textView_bulb = (TextView) findViewById(R.id.textView_bulb);
+        textView_DTS = (TextView) findViewById(R.id.textView_DTS);
+        textView_street = (TextView) findViewById(R.id.textView_street);
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
@@ -86,10 +85,10 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                 //Get the speed if it is available, in meters/second over ground.
                 speed = Double.parseDouble(String.valueOf(location.getSpeed()));
                 //String.valueOf(location.getSpeed()) returns speed in string, parse it will get a double value.
-                textView_longitude.setText(longitude);
-                textView_latitude.setText(latitude);
+                textView_coordinate.setText(longitude + ",   " + latitude);
                 textView_heading.setText(heading);
                 textView_speed.setText(speed+"");
+                // other textViews (DTS, current bulb, street) will be set once we get prediction
                 try {
                     sendLocationAndAlgorithm();
                 } catch (InterruptedException e) {
@@ -103,6 +102,20 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                 startActivity(intent);
             }
         };
+
+        Button Btn_Logout = (Button) findViewById(R.id.button_logIn);
+        Btn_Logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.remove("username");
+                editor.remove("password");
+                editor.commit();
+                Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(startIntent);
+            }
+
+        });
 
         //start getting GPS locations
         requestGPS();
@@ -124,6 +137,19 @@ public class GeoReferenced_web_request extends AppCompatActivity {
             Gson gson = new Gson();
             prediction = gson.fromJson(TTS_response, Prediction.class);
             algorithm.set(prediction, speed, r);
+            // once we got prediction, we can set up textView for DTS, street, current bulb color
+            // if those data existed
+            // Using another thread to update textViews all the time
+            try {
+                algorithm.set_textView(textView_DTS, textView_street, textView_bulb);
+            }  catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            //  check if data has enough information we need to proceed
+            // this can be said as an error checking
+            if(!algorithm.content_checking())
+                return;
             try {
                 algorithm.ToCompare();
             } catch (Exception e) {

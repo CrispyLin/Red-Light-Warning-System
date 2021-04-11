@@ -17,17 +17,17 @@
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:layout_marginLeft="60dp"
             android:layout_marginRight="60dp"
+            android:background="@mipmap/sd"
             android:ellipsize="end"
             android:gravity="center"
-            android:layout_centerInParent="true"
             android:singleLine="true"
-            android:background="@mipmap/sd"
-            android:textStyle="bold"
-
             android:textColor="#9AFF02"
-            android:textSize="22sp" />
+
+            android:textSize="22sp"
+            android:textStyle="bold" />
 
 
     </RelativeLayout>
@@ -50,12 +50,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="username"
+                android:text="Username"
                 android:textColor="#fff"
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/inputUsername"
+                android:id="@+id/editText_username"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="10dp"
@@ -64,7 +64,7 @@
 
                 android:textColor="#fff"
                 android:textColorHint="#bbbbbb"
-                android:textSize="14sp" />
+                android:textSize="18sp" />
 
 
         </LinearLayout>
@@ -81,12 +81,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="password"
+                android:text="Password"
                 android:textColor="#fff"
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/editTextPassword"
+                android:id="@+id/editText_password"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@drawable/shape_dialog_bottom_top"
@@ -94,7 +94,7 @@
                 android:inputType="textPassword"
                 android:textColor="#fff"
                 android:textColorHint="#bbbbbb"
-                android:textSize="14sp" />
+                android:textSize="18sp" />
 
 
         </LinearLayout>
@@ -104,8 +104,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:orientation="horizontal"
             android:gravity="center"
+            android:orientation="horizontal"
             android:paddingLeft="24dp"
             android:paddingRight="24dp">
 
@@ -115,27 +115,52 @@
                 android:layout_height="wrap_content"
                 android:text="Remember me"
                 android:textColor="#fff"
-                android:visibility="gone"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:visibility="gone" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=" | " android:visibility="gone"
+                android:text=" | "
                 android:textColor="#000"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:visibility="gone" />
+
             <TextView
                 android:id="@+id/tv1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Forgot password?"
+                android:text="Forgot password? "
                 android:textColor="#fff"
                 android:textSize="16sp" />
 
 
         </LinearLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="24dp"
+            android:text="IP address and port"
+            android:textColor="#fff"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/editText_IP"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="24dp"
+            android:background="@drawable/shape_dialog_bottom_top"
+            android:ems="10"
+            android:inputType="text"
+            android:textColor="#fff"
+            android:textColorHint="#bbbbbb"
+            android:textSize="18sp" />
+
         <Button
-            android:id="@+id/buttonLogin"
+            android:id="@+id/button_logIn"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_centerInParent="true"
@@ -150,7 +175,7 @@
 
 
         <TextView
-            android:id="@+id/tv_register"
+            android:id="@+id/textView_register"
             android:layout_width="match_parent"
             android:layout_height="40dp"
 

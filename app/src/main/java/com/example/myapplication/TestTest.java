@@ -24,14 +24,14 @@ public class TestTest
 {
     public static String Username = "";
     public static String Password = "";
+    public static String IP = "";
     public static String session_code = "";
 
     public static void DoTest(String[] args) throws Exception
     {
         ParseArguments(args);
-
-        String loginURL = "http://38.103.174.3:5832/APhA/Services/Login?";
-
+        //38.103.174.3:5832
+        String loginURL = "http://" + IP + "/APhA/Services/Login?";
         String params = "username=" + Username + "&password=" + Password;
 
         String loginResponse = GetStringFromURLRequest(loginURL + params);
@@ -50,7 +50,7 @@ public class TestTest
             return;
         }
         session_code = sessionCode;
-        String geoReferenceURL = "http://38.103.174.3:5832/APhA/Services/GeoReferencedPredictions?sessionCode=" + sessionCode + "&latitude=45.524868&longitude=-122.694144&heading=85&includeTopology=yes&asTurns=yes&includePermissives=no&includeAmber=no&bearingType=Compass&matchingMode=TTSDefault&version=1.0.10&returnJSON=yes";
+        String geoReferenceURL = "http://" + IP + "/APhA/Services/GeoReferencedPredictions?sessionCode=" + sessionCode + "&latitude=45.524868&longitude=-122.694144&heading=85&includeTopology=yes&asTurns=yes&includePermissives=no&includeAmber=no&bearingType=Compass&matchingMode=TTSDefault&version=1.0.10&returnJSON=yes";
 
         String geoReferenceResponse = GetStringFromURLRequest(geoReferenceURL);
     }
@@ -119,6 +119,13 @@ public class TestTest
                 case "-password":
                     if ((i + 1) < args.length) {
                         Password = args[i + 1];
+                        i++;
+                    }
+                    break;
+
+                case "-ip":
+                    if((i + 1) < args.length) {
+                        IP = args[i + 1];
                         i++;
                     }
                     break;
