@@ -13,12 +13,12 @@ public class Algorithm {
     //this color variable is used in getSmallestTimeToChange method
     //which has the information about the SmallestTimeToChange to what kind of color
     private int straightPhaseIndex;
-    private long previousTime=0;
-    private long warningInterval = 5000; //the time period between two warning is set here
+    private long previousTime = 0;
+    private final long warningInterval = 5000; //the time period between two warning is set here
     // if minDTS < currentDTS < maxDTS is true, then the algorithm will decide weather an alarm is needed
-    private int minDistanceToStopLine = 5;
-    private int maxDistanceToStopLine = 1000;
-    private double minTriggerSpeed = 0.5; //if CurrentSpeed > minTriggerSpeed, then the algorithm will decide weather an alarm is needed
+    private final int minDistanceToStopLine = 5;
+    private final int maxDistanceToStopLine = 1000;
+    private final double minTriggerSpeed = 0.5; //if CurrentSpeed > minTriggerSpeed, then the algorithm will decide weather an alarm is needed
     private Ringtone alarm;
 
 
@@ -27,7 +27,7 @@ public class Algorithm {
         prediction = p;
         speed = s;
         alarm = r;
-        }
+    }
 
 
     //  this method will check if the prediction has a enough data for us to proceed
@@ -53,65 +53,51 @@ public class Algorithm {
 
     // this method will set up textview for DTS, street and current bulb's color
     public void set_textView(TextView textView_DTS, TextView textView_currentStreet, TextView textView_straightBulb) throws Exception {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try  {
-                    // check if we can get street name from prediction
-                    if(prediction.data.data.items.length!=0
-                            && prediction.data.data.items[0].intersections != null
-                            && prediction.data.data.items[0].intersections.items.length!=0)
-                        // set Street first
-                        textView_currentStreet.setText(prediction.data.data.items[0].intersections.items[0].Name);
+        // check if we can get street name from prediction
+        if(prediction.data.data.items.length!=0
+                && prediction.data.data.items[0].intersections != null
+                && prediction.data.data.items[0].intersections.items.length!=0)
+            // set Street first
+            textView_currentStreet.setText(prediction.data.data.items[0].intersections.items[0].Name);
 
-                    // check if DTS exists
-                    if(prediction.data.data.items.length!=0
-                            && prediction.data.data.items[0].intersections != null
-                            && prediction.data.data.items[0].intersections.items.length!=0
-                            && prediction.data.data.items[0].intersections.items[0] != null
-                            && prediction.data.data.items[0].intersections.items[0].Topology != null)
-                        textView_DTS.setText(prediction.data.data.items[0].intersections.items[0].Topology.DistanceToStopLine + "");
+        // check if DTS exists
+        if(prediction.data.data.items.length!=0
+                && prediction.data.data.items[0].intersections != null
+                && prediction.data.data.items[0].intersections.items.length!=0
+                && prediction.data.data.items[0].intersections.items[0] != null
+                && prediction.data.data.items[0].intersections.items[0].Topology != null)
+            textView_DTS.setText(prediction.data.data.items[0].intersections.items[0].Topology.DistanceToStopLine + "");
 
-                    // check if straightBulb exists
-                    if(prediction.data.data.items.length!=0
-                            && prediction.data.data.items[0].intersections != null
-                            && prediction.data.data.items[0].intersections.items.length!=0
-                            && prediction.data.data.items[0].intersections.items[0] != null
-                            && prediction.data.data.items[0].intersections.items[0].Topology != null
-                            && prediction.data.data.items[0].intersections.items[0].Topology.Turns != null
-                            && prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items.length != 0
-                            && prediction.data.data.items[0].intersections.items[0].phases != null
-                            && prediction.data.data.items[0].intersections.items[0].phases.items.length != 0)
+        // check if straightBulb exists
+        if(prediction.data.data.items.length!=0
+                && prediction.data.data.items[0].intersections != null
+                && prediction.data.data.items[0].intersections.items.length!=0
+                && prediction.data.data.items[0].intersections.items[0] != null
+                && prediction.data.data.items[0].intersections.items[0].Topology != null
+                && prediction.data.data.items[0].intersections.items[0].Topology.Turns != null
+                && prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items.length != 0
+                && prediction.data.data.items[0].intersections.items[0].phases != null
+                && prediction.data.data.items[0].intersections.items[0].phases.items.length != 0)
+        {
+            for (int i=0; i<prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items.length; i++)
+            {
+                int turn_ID = prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items[i].PrimarySignalHeadID;
+                String turn_type = prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items[i].TurnType;
+                // if we find straight bulb, and its ID, we check its current color in Phase
+                if (turn_type.equals("straight"))
+                {
+                    for(int j=0; j<prediction.data.data.items[0].intersections.items[0].phases.items.length;j++)
                     {
-                        for (int i=0; i<prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items.length; i++)
+                        if(prediction.data.data.items[0].intersections.items[0].phases.items[j].PhaseNr == turn_ID)
                         {
-                            int turn_ID = prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items[i].PrimarySignalHeadID;
-                            String turn_type = prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items[i].TurnType;
-                            // if we find straight bulb, and its ID, we check its current color in Phase
-                            if (turn_type.equals("straight"))
-                            {
-                                for(int j=0; j<prediction.data.data.items[0].intersections.items[0].phases.items.length;j++)
-                                {
-                                    if(prediction.data.data.items[0].intersections.items[0].phases.items[j].PhaseNr == turn_ID)
-                                    {
-                                        textView_straightBulb.setText(prediction.data.data.items[0].intersections.items[0].phases.items[j].BulbColor);
-                                        break;
-                                    }
-                                }
-                                break; //after update straight bulb's color, break the for loop
-                            }
+                            textView_straightBulb.setText(prediction.data.data.items[0].intersections.items[0].phases.items[j].BulbColor);
+                            break;
                         }
-
                     }
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    break; //after update straight bulb's color, break the for loop
                 }
             }
-        });
-        thread.start();
-        thread.join();
+        }
     }
 
     //this method will calculate the time needed for the car in current speed to the nearest stop line
@@ -166,35 +152,24 @@ public class Algorithm {
     }
 
 
-    //create a new thread to display warning every 5 seconds by calculating time interval to limit the warning frequency.
+    //display warning at least every warningInterval seconds by calculating time interval to limit the warning frequency.
     //if driver is too far or too close the intersection, stop display warnings
     public void ToCompare() throws Exception
     {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try  {
-                    //get current time
-                    Date date = new Date();
-                    //This method returns the time in millis
-                    long currentTimeInMs = date.getTime();
-                    long TimeInterval = currentTimeInMs - previousTime;
-                    //if the time between now and last warning is greater than the Max Interval we set
-                    //and the car is not too far or too close to the stopline
-                    //and the speend is not too small (this is to ensure user is not waiting for something)
-                    //do the comparation
-                    double distanceToStopLine = prediction.data.data.items[0].intersections.items[0].Topology.DistanceToStopLine;
-                    if(TimeInterval > warningInterval && distanceToStopLine > minDistanceToStopLine && distanceToStopLine < maxDistanceToStopLine && speed >= minTriggerSpeed) {
-                        compareTwoTimes();
-                        previousTime = currentTimeInMs;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
-        thread.join();
+        //get current time
+        Date date = new Date();
+        //This method returns the time in millis
+        long currentTimeInMs = date.getTime();
+        long TimeInterval = currentTimeInMs - previousTime;
+        //if the time between now and last warning is greater than the Max Interval we set
+        //and the car is not too far or too close to the stopline
+        //and the speend is not too small (this is to ensure user is not waiting for something)
+        //do the comparation
+        double distanceToStopLine = prediction.data.data.items[0].intersections.items[0].Topology.DistanceToStopLine;
+        if(TimeInterval > warningInterval && distanceToStopLine > minDistanceToStopLine && distanceToStopLine < maxDistanceToStopLine && speed >= minTriggerSpeed) {
+            compareTwoTimes();
+            previousTime = currentTimeInMs;
+        }
     }
 
 
@@ -256,6 +231,11 @@ public class Algorithm {
                     int greenIndex = searchGreenLight();
                     if(greenIndex < 0){
                         //this means GreenLight does not exist in the predictiveChanges
+                        try {
+                            alarm.play();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         Log.i("Warning", "slow down, or you will encounter Amber or Red light");
                     }
                     int timeToChangeOfNextGreenLight = prediction.data.data.items[0].intersections.items[0].phases.items[straightPhaseIndex].PredictiveChanges.Items[greenIndex].TimeToChange;

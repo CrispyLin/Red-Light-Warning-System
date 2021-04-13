@@ -5,6 +5,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 
@@ -47,8 +48,9 @@ public class GeoReferenced_web_request extends AppCompatActivity {
     private String session_code;
     //private JSONObject json_data;
     private Prediction prediction;
-    private Ringtone r;
+    private Ringtone alarm;
     private SharedPreferences sharedPreferences;
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -59,7 +61,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
 
         //get warning sound
         Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        r = RingtoneManager.getRingtone(this.getApplicationContext(), notification);
+        alarm = RingtoneManager.getRingtone(this.getApplicationContext(), notification);
 
         //get session_code from previous activity
         if (getIntent().hasExtra("session_code")) {
@@ -103,7 +105,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
             }
         };
 
-        Button Btn_Logout = (Button) findViewById(R.id.layout_geoReference);
+        Button Btn_Logout = (Button) findViewById(R.id.button_logOut);
         Btn_Logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,8 +114,13 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                 editor.remove("password");
                 editor.remove("IP");
                 editor.commit();
+                // redirect user to the login page
                 Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(startIntent);
+                // close this activity, but first close the location listener which is listening on the location, otherwise
+                // finish() won't be executed
+                locationManager.removeUpdates(locationListener);
+                finish();
             }
 
         });
@@ -137,10 +144,8 @@ public class GeoReferenced_web_request extends AppCompatActivity {
         if(!TTS_response.equals("")) {
             Gson gson = new Gson();
             prediction = gson.fromJson(TTS_response, Prediction.class);
-            algorithm.set(prediction, speed, r);
+            algorithm.set(prediction, speed, alarm);
             // once we got prediction, we can set up textView for DTS, street, current bulb color
-            // if those data existed
-            // Using another thread to update textViews all the time
             try {
                 algorithm.set_textView(textView_DTS, textView_street, textView_bulb);
             }  catch (Exception e) {

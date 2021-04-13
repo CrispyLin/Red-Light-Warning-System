@@ -22,10 +22,10 @@ import java.util.regex.Pattern;
 
 public class TestTest
 {
-    public static String Username = "";
-    public static String Password = "";
-    public static String IP = "";
-    public static String session_code = "";
+    public static String Username = null;
+    public static String Password = null;
+    public static String IP = null;
+    public static String session_code = null;
 
     public static void DoTest(String[] args) throws Exception
     {
@@ -37,7 +37,7 @@ public class TestTest
         String loginResponse = GetStringFromURLRequest(loginURL + params);
         Log.i("Mytag","Sessioncode Request Result: " + loginResponse);
         // Find what is in between <SessionCode> and </SessionCode>
-        String sessionCode = "";
+        String sessionCode = null;
         Pattern p = Pattern.compile(".*<SessionCode>(.*)</SessionCode>.*");
         Matcher m = p.matcher(loginResponse);
         if(m.matches()) {
@@ -46,7 +46,7 @@ public class TestTest
 
         if (Objects.requireNonNull(sessionCode).length() == 0 ) {
             Log.e("Mytag","Error in finding session code.");
-            session_code = "";
+            session_code = null;
             return;
         }
         session_code = sessionCode;
