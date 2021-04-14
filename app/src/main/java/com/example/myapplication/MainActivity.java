@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private void auto_login(SharedPreferences sharedPreferences){
         String username = sharedPreferences.getString("username", "null");
         String password = sharedPreferences.getString("password", "null");
-        String IP = sharedPreferences.getString("IP", "216.151.19.133:5832");
+        String IP = sharedPreferences.getString("IP", "38.103.174.3:5832");
         String[] arguments = {"-username", username, "-password", password, "IP", IP};
         String session_code = null;
         // try to get session_code from TTS server
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private void manual_login(SharedPreferences sharedPreferences){
         setContentView(R.layout.activity_main);
         EditText editText_IP = (EditText) findViewById(R.id.editText_IP);
-        editText_IP.setText("216.151.19.133:5832");
+        editText_IP.setText("38.103.174.3:5832");
         Button Btn_Login = (Button) findViewById(R.id.button_logIn);
         Btn_Login.setOnClickListener(new View.OnClickListener() {
             @Override
