@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         String username = sharedPreferences.getString("username", "null");
         String password = sharedPreferences.getString("password", "null");
         String IP = sharedPreferences.getString("IP", "38.103.174.3:5832");
-        String[] arguments = {"-username", username, "-password", password, "IP", IP};
+        String[] arguments = {"-username", username, "-password", password, "-IP", IP};
         String session_code = null;
         // try to get session_code from TTS server
         try {
@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
             // if TTS's server doesn't like old credentials, direct user to manual login as well
             manual_login(sharedPreferences);
         } else {
+
             //create an object to another activity
             Intent startIntent = new Intent(getApplicationContext(), GeoReferenced_web_request.class);
 
