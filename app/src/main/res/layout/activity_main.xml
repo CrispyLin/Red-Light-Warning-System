@@ -157,7 +157,8 @@
             android:inputType="text"
             android:textColor="#fff"
             android:textColorHint="#bbbbbb"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            />
 
         <Button
             android:id="@+id/button_logIn"
