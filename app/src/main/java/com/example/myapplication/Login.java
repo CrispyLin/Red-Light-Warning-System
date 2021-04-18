@@ -80,7 +80,7 @@ public class Login extends AppCompatActivity {
     }
 
     private void manual_login(SharedPreferences sharedPreferences){
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
         EditText editText_IP = (EditText) findViewById(R.id.editText_IP);
         editText_IP.setText("38.103.174.3:5832");
         Button Btn_Login = (Button) findViewById(R.id.button_logIn);
