@@ -5,7 +5,6 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 
@@ -46,6 +45,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
     private LocationManager locationManager;
     private LocationListener locationListener;
     private String session_code;
+    private String IP;
     //private JSONObject json_data;
     private Prediction prediction;
     private Ringtone alarm;
@@ -66,6 +66,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
         //get session_code from previous activity
         if (getIntent().hasExtra("session_code")) {
             session_code = getIntent().getExtras().getString("session_code");
+            IP = getIntent().getExtras().getString("IP");
         }
 
         textView_coordinate = (TextView) findViewById(R.id.textView_coordinate);
@@ -92,7 +93,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                 textView_speed.setText(speed+"");
                 // other textViews (DTS, current bulb, street) will be set once we get prediction
                 try {
-                    sendLocationAndAlgorithm();
+                    sendLocationToTTS();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -115,7 +116,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                 editor.remove("IP");
                 editor.commit();
                 // redirect user to the login page
-                Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent startIntent = new Intent(getApplicationContext(), Login.class);
                 startActivity(startIntent);
                 // close this activity, but first close the location listener which is listening on the location, otherwise
                 // finish() won't be executed
@@ -131,7 +132,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
 
     //This method will send GET request to the TTS's server and receive response from the TTS server
     //and based on the response, using algorithm to decide if a warning needed
-    private void sendLocationAndAlgorithm() throws InterruptedException {
+    private void sendLocationToTTS() throws InterruptedException {
         String geoReferenceURL = "http://38.103.174.3:5832/APhA/Services/GeoReferencedPredictions?sessionCode=" + session_code + "&latitude=" + latitude + "&longitude=" + longitude + "&heading=" + heading + "&includeTopology=yes&asTurns=yes&includePermissives=no&includeAmber=no&bearingType=Compass&matchingMode=TTSDefault&version=1.0.10&returnJSON=yes";
         String TTS_response = "";
         try {

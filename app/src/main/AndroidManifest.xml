@@ -19,7 +19,7 @@
     android:theme="@style/Theme.MyApplication"
     android:usesCleartextTraffic="true">
     <activity android:name=".GeoReferenced_web_request"></activity>
-    <activity android:name=".MainActivity">
+    <activity android:name=".Login">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
