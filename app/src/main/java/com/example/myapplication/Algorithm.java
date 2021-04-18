@@ -188,7 +188,9 @@ public class Algorithm {
     //Assume Amber means the color of bulb is going to change
     public void compareTwoTimes(){
         double timeToStopLine = calculateTimeToStopLine();
-        double smallestTimeToChange = getSmallestTimeToChange();//this step also gives us the smallestPhaseIndex variable
+        // find the smallest Time to change of straight bulb and update straightPhaseIndex (which is a global variable)
+        double smallestTimeToChange = getSmallestTimeToChange();
+        // using the straightPhaseIndex to find the next color of straight bulb
         String nextColor = prediction.data.data.items[0].intersections.items[0].phases.items[straightPhaseIndex].BulbColor;
         //handling currently red bulb
         switch (nextColor) {

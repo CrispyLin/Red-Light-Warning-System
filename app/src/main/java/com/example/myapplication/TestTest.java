@@ -70,6 +70,7 @@ public class TestTest
         });
         thread.start();
         thread.join();
+
         return geoReferenceResponse[0];
     }
 

@@ -5,6 +5,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 
@@ -63,7 +64,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
         Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         alarm = RingtoneManager.getRingtone(this.getApplicationContext(), notification);
 
-        //get session_code from previous activity
+        //get session_code and IP from previous activity
         if (getIntent().hasExtra("session_code")) {
             session_code = getIntent().getExtras().getString("session_code");
             IP = getIntent().getExtras().getString("IP");
@@ -88,12 +89,51 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                 //Get the speed if it is available, in meters/second over ground.
                 speed = Double.parseDouble(String.valueOf(location.getSpeed()));
                 //String.valueOf(location.getSpeed()) returns speed in string, parse it will get a double value.
+
+                // set coordinate, heading, and speed's textViews initially
+                // other textViews (DTS, current bulb, street) will be set once we get prediction response from TTS
                 textView_coordinate.setText(longitude + ",   " + latitude);
                 textView_heading.setText(heading);
                 textView_speed.setText(speed+"");
-                // other textViews (DTS, current bulb, street) will be set once we get prediction
+
+                // 1.   try to send location with get request to TTS and receive response from TTS
+                //      if response is not null, parse the response to gson and set up algorithm
+                //      and setup other textViews: DTS, street, bulb color
+                // 2.   Checking if response has sufficient info we need in order to do the algorithm
+                //      If yes then do the algorithm, if no we do nothing
                 try {
-                    sendLocationToTTS();
+                    // receive response from TTS
+                    String TTS_response = sendLocationToTTS();
+                    if(TTS_response != null){
+                        // parse response into a formatted class called Prediction
+                        Gson gson = new Gson();
+                        prediction = gson.fromJson(TTS_response, Prediction.class);
+                        // set up algorithm class with prediction, speed and alarm
+                        algorithm.set(prediction, speed, alarm);
+                        // once we got prediction, we can set up textView for DTS, street, current bulb color
+                        // but set textView will be checking if certain fields of the Prediction is valid in order to
+                        // display DTS, current street, current bulb color
+                        // if certain fields are missing, it will do nothing
+                        try {
+                            algorithm.set_textView(textView_DTS, textView_street, textView_bulb);
+                        }  catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        //  check if data has enough information we need to proceed
+                        //  this can be said as an error checking to make sure certain fields of predication is valid
+                        //  in order to do the algorithm
+                        if(!algorithm.content_checking())
+                            return;
+                        try {
+                            algorithm.ToCompare();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else{
+                        Log.e("Mytag", "Error! TTS response is empty!");
+                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -131,37 +171,25 @@ public class GeoReferenced_web_request extends AppCompatActivity {
     }
 
     //This method will send GET request to the TTS's server and receive response from the TTS server
-    //and based on the response, using algorithm to decide if a warning needed
-    private void sendLocationToTTS() throws InterruptedException {
-        String geoReferenceURL = "http://38.103.174.3:5832/APhA/Services/GeoReferencedPredictions?sessionCode=" + session_code + "&latitude=" + latitude + "&longitude=" + longitude + "&heading=" + heading + "&includeTopology=yes&asTurns=yes&includePermissives=no&includeAmber=no&bearingType=Compass&matchingMode=TTSDefault&version=1.0.10&returnJSON=yes";
-        String TTS_response = "";
+    //checking if response is empty
+    //return true if response is not empty
+    //return false if response is empty
+    private String sendLocationToTTS() throws InterruptedException {
+        // make a get request URL by using: IP, session_code, latitude, longitude, heading
+        String geoReferenceURL = "http://" + IP +"/APhA/Services/GeoReferencedPredictions?sessionCode=" + session_code + "&latitude=" + latitude + "&longitude=" + longitude + "&heading=" + heading + "&includeTopology=yes&asTurns=yes&includePermissives=no&includeAmber=no&bearingType=Compass&matchingMode=TTSDefault&version=1.0.10&returnJSON=yes";
+        String TTS_response = null;
         try {
+            // send url to the TTS, get response back and saved in TTS_response
             TTS_response = TestTest.SendInputs(geoReferenceURL);
         } catch (Exception e) {
             e.printStackTrace();
-            return;
+            return null;
         }
-        //TTS_RESPONSE
-        if(!TTS_response.equals("")) {
-            Gson gson = new Gson();
-            prediction = gson.fromJson(TTS_response, Prediction.class);
-            algorithm.set(prediction, speed, alarm);
-            // once we got prediction, we can set up textView for DTS, street, current bulb color
-            try {
-                algorithm.set_textView(textView_DTS, textView_street, textView_bulb);
-            }  catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            //  check if data has enough information we need to proceed
-            // this can be said as an error checking
-            if(!algorithm.content_checking())
-                return;
-            try {
-                algorithm.ToCompare();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        // if TTS response is not empty, return it; otherwise return null
+        if(TTS_response != null) {
+            return TTS_response;
+        }else{
+            return null;
         }
     }
 
