@@ -113,7 +113,9 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                         // once we got prediction, we can set up textView for DTS, street, current bulb color
                         // but set textView will be checking if certain fields of the Prediction is valid in order to
                         // display DTS, current street, current bulb color
-                        // if certain fields are missing, it will do nothing
+                        // if certain fields are missing, it will clear old content in certain textView
+                        // It also checks Alert Normal in the prediction, if it is not "Normal" then the
+                        // color of bulb is not reliable, and set textView for bulb to "Alert" to alert user
                         try {
                             algorithm.set_textView(textView_DTS, textView_street, textView_bulb);
                         }  catch (Exception e) {

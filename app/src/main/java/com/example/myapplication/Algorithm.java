@@ -14,7 +14,7 @@ public class Algorithm {
     //which has the information about the SmallestTimeToChange to what kind of color
     private int straightPhaseIndex;
     private long previousTime = 0;
-    private final long warningInterval = 5000; //the time period between two warning is set here
+    private final long warningInterval = 5000; //the time period between two warning is set here (in millisecs)
     // if minDTS < currentDTS < maxDTS is true, then the algorithm will decide weather an alarm is needed
     private final int minDistanceToStopLine = 0;
     private final int maxDistanceToStopLine = 100;
@@ -47,14 +47,15 @@ public class Algorithm {
                 || prediction.data.data.items[0].intersections.items.length == 0
                 || prediction.data.data.items[0].intersections.items[0].phases == null
                 || prediction.data.data.items[0].intersections.items[0].phases.items.length == 0
-                || prediction.data.data.items[0].intersections.items[0].Topology == null)
+                || prediction.data.data.items[0].intersections.items[0].Topology == null
+                || !prediction.data.data.items[0].intersections.items[0].Alert.equals("Normal")) // Alert Normal checking
             return false;
         else
             return true;
     }
 
 
-    // this method will set up textview for DTS, street and current bulb's color
+    // this method will set up textViews for DTS, street and current bulb's color
     public void set_textView(TextView textView_DTS, TextView textView_currentStreet, TextView textView_straightBulb) throws Exception {
         // check if we can get street name from prediction
         if(prediction.data.data.items.length!=0
@@ -76,7 +77,6 @@ public class Algorithm {
         else{
             textView_DTS.setText("");
         }
-
 
         // check if straightBulb exists
         // a boolean variable created just to check if straightBulb exists
@@ -117,6 +117,13 @@ public class Algorithm {
         // if modified is true, it means textView has been modified, we dont need to clear out textView
         if (!modified){
             textView_straightBulb.setText("");
+        }
+
+        // Check for alert Normal
+        // if it is not normal, set textView_straightBulb to "alert"
+        if (!prediction.data.data.items[0].intersections.items[0].Alert.equals("Normal"))
+        {
+            textView_straightBulb.setText("Alert");
         }
     }
 
@@ -285,11 +292,29 @@ public class Algorithm {
                 if (prediction.data.data.items[0].intersections.items[0].phases.items[straightPhaseIndex].PredictiveChanges.Items[0].BulbColor.equals("Amber")) {
                     //current Green, but next will be Amber
                     if (timeToStopLine >= smallestTimeToChange) {
-                        Log.i("Warning", "speed up, or you will encounter Amber or Red light");
+                        try {
+                            alarm.play();
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        Log.i("Warning", "slow down, or you will encounter Amber or Red light");
                     }
                 } else if (prediction.data.data.items[0].intersections.items[0].phases.items[straightPhaseIndex].PredictiveChanges.Items[0].BulbColor.equals("Green")) {
                     //current Green, but next will be Green as well
                     //do nothing
+
+                } else {
+                    // current Green, but next color will be Red
+                    if (timeToStopLine >= smallestTimeToChange) {
+                        try {
+                            alarm.play();
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        Log.i("Warning", "slow down, or you will encounter Amber or Red light");
+                    }
                 }
                 break;
         }
