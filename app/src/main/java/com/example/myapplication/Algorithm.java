@@ -16,9 +16,9 @@ public class Algorithm {
     private long previousTime = 0;
     private final long warningInterval = 5000; //the time period between two warning is set here
     // if minDTS < currentDTS < maxDTS is true, then the algorithm will decide weather an alarm is needed
-    private final int minDistanceToStopLine = 5;
-    private final int maxDistanceToStopLine = 1000;
-    private final double minTriggerSpeed = 0.5; //if CurrentSpeed > minTriggerSpeed, then the algorithm will decide weather an alarm is needed
+    private final int minDistanceToStopLine = 0;
+    private final int maxDistanceToStopLine = 100;
+    private final double minTriggerSpeed = 5; //if CurrentSpeed > minTriggerSpeed, then the algorithm will decide weather an alarm is needed
     private Ringtone alarm;
 
 
@@ -38,6 +38,9 @@ public class Algorithm {
     //  5. if prediction's phases' item field is empty, return false
     //  otherwise return true
     //  the order matters
+    //  ***********************
+    //  Another important note here:
+    //  if the prediction doesn't have appropriate date for any textView, clear content already inside that textView
     public boolean content_checking(){
         if(prediction.data.data.items.length == 0
                 || prediction.data.data.items[0].intersections == null
@@ -59,6 +62,9 @@ public class Algorithm {
                 && prediction.data.data.items[0].intersections.items.length!=0)
             // set Street first
             textView_currentStreet.setText(prediction.data.data.items[0].intersections.items[0].Name);
+        else{
+            textView_currentStreet.setText("");
+        }
 
         // check if DTS exists
         if(prediction.data.data.items.length!=0
@@ -67,8 +73,14 @@ public class Algorithm {
                 && prediction.data.data.items[0].intersections.items[0] != null
                 && prediction.data.data.items[0].intersections.items[0].Topology != null)
             textView_DTS.setText(prediction.data.data.items[0].intersections.items[0].Topology.DistanceToStopLine + "");
+        else{
+            textView_DTS.setText("");
+        }
+
 
         // check if straightBulb exists
+        // a boolean variable created just to check if straightBulb exists
+        boolean modified = false;
         if(prediction.data.data.items.length!=0
                 && prediction.data.data.items[0].intersections != null
                 && prediction.data.data.items[0].intersections.items.length!=0
@@ -91,12 +103,20 @@ public class Algorithm {
                         if(prediction.data.data.items[0].intersections.items[0].phases.items[j].PhaseNr == turn_ID)
                         {
                             textView_straightBulb.setText(prediction.data.data.items[0].intersections.items[0].phases.items[j].BulbColor);
+                            modified = true;
                             break;
                         }
                     }
                     break; //after update straight bulb's color, break the for loop
                 }
             }
+        }
+        // check to see if textView has been modified in the above big for loop
+        // this makes sure clearing textView for lightBulb which is slightly different than other textViews because
+        // it requires more steps to check if it exists in the TTS response
+        // if modified is true, it means textView has been modified, we dont need to clear out textView
+        if (!modified){
+            textView_straightBulb.setText("");
         }
     }
 
@@ -164,9 +184,10 @@ public class Algorithm {
         //if the time between now and last warning is greater than the Max Interval we set
         //and the car is not too far or too close to the stopline
         //and the speend is not too small (this is to ensure user is not waiting for something)
-        //do the comparation
+        //do the comparision
         double distanceToStopLine = prediction.data.data.items[0].intersections.items[0].Topology.DistanceToStopLine;
-        if(TimeInterval > warningInterval && distanceToStopLine > minDistanceToStopLine && distanceToStopLine < maxDistanceToStopLine && speed >= minTriggerSpeed) {
+        if(TimeInterval > warningInterval && distanceToStopLine > minDistanceToStopLine
+                && distanceToStopLine < maxDistanceToStopLine && speed >= minTriggerSpeed) {
             compareTwoTimes();
             previousTime = currentTimeInMs;
         }
@@ -212,6 +233,11 @@ public class Algorithm {
                         //so if driver will arrive the stopline before bulb turns green, we warn driver to slow down
                         int timeToChangeOfNextGreen = prediction.data.data.items[0].intersections.items[0].phases.items[straightPhaseIndex].PredictiveChanges.Items[0].TimeToChange;
                         if (timeToStopLine < timeToChangeOfNextGreen) {
+                            try {
+                                alarm.play();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             Log.i("Warning", "slow down, or you will encounter red or Amber light");
                         }
                         break;

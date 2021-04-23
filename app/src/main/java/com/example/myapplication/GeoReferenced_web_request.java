@@ -121,6 +121,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                         }
 
                         //  check if data has enough information we need to proceed
+                        //  this will also clear the textViews once the data is invalid
                         //  this can be said as an error checking to make sure certain fields of predication is valid
                         //  in order to do the algorithm
                         if(!algorithm.content_checking())
