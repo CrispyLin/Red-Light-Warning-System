@@ -15,9 +15,9 @@ public class Algorithm {
     private int straightPhaseIndex;
     private long previousTime = 0;
     private final long warningInterval = 5000; //the time period between two warning is set here (in millisecs)
-    // if minDTS < currentDTS < maxDTS is true, then the algorithm will decide weather an alarm is needed
-    private final int minDistanceToStopLine = 0;
-    private final int maxDistanceToStopLine = 100;
+    // if minWD < currentDTS < maxWD is true, then the algorithm will decide weather an alarm is needed
+    private final int minWarningDistance = 0;
+    private int maxWarningDistance = 0;
     private final double minTriggerSpeed = 5; //if CurrentSpeed > minTriggerSpeed, then the algorithm will decide weather an alarm is needed
     private Ringtone alarm;
 
@@ -55,6 +55,19 @@ public class Algorithm {
     }
 
 
+    // this method will detetmine the max warning Distance to trigger the alarm
+    // using the global varibale private static double speed.
+    public void DetermineMaxWarningDistance(){
+        double new_maxWarningDistance = 0.0;
+        // this stopping distance formula is found from web:
+        // https://mobilityblog.tuv.com/en/calculating-stopping-distance-braking-is-not-a-matter-of-luck/#:~:text=Stopping%20distance%20%3D%20reaction%20distance%20%2B%20braking%20distance
+        // speed's unit is m/s so we have to convert it to km/h
+        double speed_in_KmPerHour = speed * 3.6;
+        new_maxWarningDistance = (speed_in_KmPerHour / 10) * (speed_in_KmPerHour / 10) + (speed_in_KmPerHour / 10 * 3);
+        maxWarningDistance = (int)Math.ceil(new_maxWarningDistance);
+    }
+
+
     // this method will set up textViews for DTS, street and current bulb's color
     public void set_textView(TextView textView_DTS, TextView textView_currentStreet, TextView textView_straightBulb) throws Exception {
         // check if we can get street name from prediction
@@ -71,7 +84,6 @@ public class Algorithm {
         if(prediction.data.data.items.length!=0
                 && prediction.data.data.items[0].intersections != null
                 && prediction.data.data.items[0].intersections.items.length!=0
-                && prediction.data.data.items[0].intersections.items[0] != null
                 && prediction.data.data.items[0].intersections.items[0].Topology != null)
             textView_DTS.setText(prediction.data.data.items[0].intersections.items[0].Topology.DistanceToStopLine + "");
         else{
@@ -84,7 +96,6 @@ public class Algorithm {
         if(prediction.data.data.items.length!=0
                 && prediction.data.data.items[0].intersections != null
                 && prediction.data.data.items[0].intersections.items.length!=0
-                && prediction.data.data.items[0].intersections.items[0] != null
                 && prediction.data.data.items[0].intersections.items[0].Topology != null
                 && prediction.data.data.items[0].intersections.items[0].Topology.Turns != null
                 && prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items.length != 0
@@ -120,10 +131,17 @@ public class Algorithm {
         }
 
         // Check for alert Normal
+        // first check if intersection is existed and items is existed.
         // if it is not normal, set textView_straightBulb to "alert"
-        if (!prediction.data.data.items[0].intersections.items[0].Alert.equals("Normal"))
+        if(prediction.data.data.items.length != 0
+                && prediction.data.data.items[0].intersections != null
+                && prediction.data.data.items[0].intersections.items.length != 0
+                && prediction.data.data.items[0].intersections.items[0].Alert != null)
         {
-            textView_straightBulb.setText("Alert");
+            if (!prediction.data.data.items[0].intersections.items[0].Alert.equals("Normal"))
+            {
+                textView_straightBulb.setText("Alert");
+            }
         }
     }
 
@@ -193,8 +211,8 @@ public class Algorithm {
         //and the speend is not too small (this is to ensure user is not waiting for something)
         //do the comparision
         double distanceToStopLine = prediction.data.data.items[0].intersections.items[0].Topology.DistanceToStopLine;
-        if(TimeInterval > warningInterval && distanceToStopLine > minDistanceToStopLine
-                && distanceToStopLine < maxDistanceToStopLine && speed >= minTriggerSpeed) {
+        if(TimeInterval > warningInterval && distanceToStopLine > minWarningDistance
+                && distanceToStopLine < maxWarningDistance && speed >= minTriggerSpeed) {
             compareTwoTimes();
             previousTime = currentTimeInMs;
         }

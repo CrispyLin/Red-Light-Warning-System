@@ -110,6 +110,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                         prediction = gson.fromJson(TTS_response, Prediction.class);
                         // set up algorithm class with prediction, speed and alarm
                         algorithm.set(prediction, speed, alarm);
+                        algorithm.DetermineMaxWarningDistance();
                         // once we got prediction, we can set up textView for DTS, street, current bulb color
                         // but set textView will be checking if certain fields of the Prediction is valid in order to
                         // display DTS, current street, current bulb color
