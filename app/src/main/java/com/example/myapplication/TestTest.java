@@ -1,3 +1,6 @@
+// This class originally is provided by our project partner Alex Marineau from Traffic Technology Services
+// We did some modifications on it and added some more functions in this class.
+
 package com.example.myapplication;
 
 //import android.os.Bundle;
