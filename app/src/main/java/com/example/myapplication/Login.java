@@ -13,6 +13,9 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 public class Login extends AppCompatActivity {
+    // member variable
+    private final String def_IP = "38.103.174.3:5832"; // the default IP that can be modified once TTS changes their IP
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +33,7 @@ public class Login extends AppCompatActivity {
             // and new credentials will be saved
             manual_login(sharedPreferences);
         }
+        return;
     }
 
 
@@ -41,7 +45,7 @@ public class Login extends AppCompatActivity {
     private void auto_login(SharedPreferences sharedPreferences){
         String username = sharedPreferences.getString("username", "null");
         String password = sharedPreferences.getString("password", "null");
-        String IP = sharedPreferences.getString("IP", "38.103.174.3:5832");
+        String IP = sharedPreferences.getString("IP", def_IP);
         String[] arguments = {"-username", username, "-password", password, "-IP", IP};
         String session_code = null;
         // try to get session_code from TTS server
@@ -64,7 +68,9 @@ public class Login extends AppCompatActivity {
             //create an object to another activity
             direct_user_to_next_activity(IP, session_code);
         }
+        return;
     }
+
 
     // create another intent activity, send user to the next activity and close current one
     private void direct_user_to_next_activity(String IP, String session_code){
@@ -77,12 +83,14 @@ public class Login extends AppCompatActivity {
         //running the new activity
         startActivity(startIntent);
         finish();
+        return;
     }
+
 
     private void manual_login(SharedPreferences sharedPreferences){
         setContentView(R.layout.activity_login);
         EditText editText_IP = (EditText) findViewById(R.id.editText_IP);
-        editText_IP.setText("38.103.174.3:5832");
+        editText_IP.setText(def_IP);
         Button Btn_Login = (Button) findViewById(R.id.button_logIn);
         Btn_Login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,5 +131,6 @@ public class Login extends AppCompatActivity {
                 }
             }
         });
+        return;
     }
 }
