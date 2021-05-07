@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.RedLightWarning.System;
 
 import android.content.SharedPreferences;
 import android.media.Ringtone;
@@ -28,8 +28,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.google.gson.Gson;
-
-import java.util.Date;
 
 
 public class GeoReferenced_web_request extends AppCompatActivity {

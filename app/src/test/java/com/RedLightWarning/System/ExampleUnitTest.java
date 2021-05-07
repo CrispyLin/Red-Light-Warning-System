@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.RedLightWarning.System;
 
 import org.junit.Test;
 
