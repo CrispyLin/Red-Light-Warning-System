@@ -8,25 +8,38 @@ import java.util.Date;
 
 public class Algorithm {
     //we will do the algorithm here
-    private static Prediction prediction;
-    private static double speed;
+    public static Prediction prediction;
+    public static double speed;
     //this color variable is used in getSmallestTimeToChange method
     //which has the information about the SmallestTimeToChange to what kind of color
-    private int straightPhaseIndex;
-    private long previousTime = 0;
-    private final long warningInterval = 5000; //the time period between two warning is set here (in millisecs)
+    public int straightPhaseIndex;
+    public long previousTime = 0;
+    public final long warningInterval = 5000; //the time period between two warning is set here (in millisecs)
     // if minWD < currentDTS < maxWD is true, then the algorithm will decide weather an alarm is needed
-    private final int minWarningDistance = 0;
-    private int maxWarningDistance = 0;
-    private final double minTriggerSpeed = 5; //if CurrentSpeed > minTriggerSpeed, then the algorithm will decide weather an alarm is needed
-    private Ringtone alarm;
+    public final int minWarningDistance = 0;
+    public int maxWarningDistance = 0;
+    public final double minTriggerSpeed = 5; //if CurrentSpeed > minTriggerSpeed, then the algorithm will decide weather an alarm is needed
+    public Ringtone alarm;
 
 
     //setter method
-    public void set(Prediction p, double s, Ringtone r)  {
+    public void Set(Prediction p, double s, Ringtone r)  {
         prediction = p;
         speed = s;
         alarm = r;
+    }
+
+
+    // this method will be called when there is a needed to display a warning to the user
+    // display a sound warning and printing warning message to the console (user cannot see the console)
+    private void DisplayWarning(String warning_message)
+    {
+        try {
+            alarm.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Log.i("Warning", warning_message);
     }
 
 
@@ -41,7 +54,7 @@ public class Algorithm {
     //  ***********************
     //  Another important note here:
     //  if the prediction doesn't have appropriate date for any textView, clear content already inside that textView
-    public boolean content_checking(){
+    public boolean ContentChecking(){
         if(prediction.data.data.items.length == 0
                 || prediction.data.data.items[0].intersections == null
                 || prediction.data.data.items[0].intersections.items.length == 0
@@ -69,84 +82,96 @@ public class Algorithm {
 
 
     // this method will set up textViews for DTS, street and current bulb's color
-    public void set_textView(TextView textView_DTS, TextView textView_currentStreet, TextView textView_straightBulb) throws Exception {
-        // check if we can get street name from prediction
-        if(prediction.data.data.items.length!=0
-                && prediction.data.data.items[0].intersections != null
-                && prediction.data.data.items[0].intersections.items.length!=0)
-            // set Street first
-            textView_currentStreet.setText(prediction.data.data.items[0].intersections.items[0].Name);
-        else{
-            textView_currentStreet.setText("");
-        }
+    public void SetTextView(TextView textView_DTS, TextView textView_currentStreet, TextView textView_straightBulb) throws Exception {
+        final String[] geoReferenceResponse = {null};
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try  {
+                    // check if we can get street name from prediction
+                    if(prediction.data.data.items.length!=0
+                            && prediction.data.data.items[0].intersections != null
+                            && prediction.data.data.items[0].intersections.items.length!=0)
+                        // set Street first
+                        textView_currentStreet.setText(prediction.data.data.items[0].intersections.items[0].Name);
+                    else{
+                        textView_currentStreet.setText("");
+                    }
 
-        // check if DTS exists
-        if(prediction.data.data.items.length!=0
-                && prediction.data.data.items[0].intersections != null
-                && prediction.data.data.items[0].intersections.items.length!=0
-                && prediction.data.data.items[0].intersections.items[0].Topology != null)
-            textView_DTS.setText(prediction.data.data.items[0].intersections.items[0].Topology.DistanceToStopLine + "");
-        else{
-            textView_DTS.setText("");
-        }
+                    // check if DTS exists
+                    if(prediction.data.data.items.length!=0
+                            && prediction.data.data.items[0].intersections != null
+                            && prediction.data.data.items[0].intersections.items.length!=0
+                            && prediction.data.data.items[0].intersections.items[0].Topology != null)
+                        textView_DTS.setText(prediction.data.data.items[0].intersections.items[0].Topology.DistanceToStopLine + "");
+                    else{
+                        textView_DTS.setText("");
+                    }
 
-        // check if straightBulb exists
-        // a boolean variable created just to check if straightBulb exists
-        boolean modified = false;
-        if(prediction.data.data.items.length!=0
-                && prediction.data.data.items[0].intersections != null
-                && prediction.data.data.items[0].intersections.items.length!=0
-                && prediction.data.data.items[0].intersections.items[0].Topology != null
-                && prediction.data.data.items[0].intersections.items[0].Topology.Turns != null
-                && prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items.length != 0
-                && prediction.data.data.items[0].intersections.items[0].phases != null
-                && prediction.data.data.items[0].intersections.items[0].phases.items.length != 0)
-        {
-            for (int i=0; i<prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items.length; i++)
-            {
-                int turn_ID = prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items[i].PrimarySignalHeadID;
-                String turn_type = prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items[i].TurnType;
-                // if we find straight bulb, and its ID, we check its current color in Phase
-                if (turn_type.equals("straight"))
-                {
-                    for(int j=0; j<prediction.data.data.items[0].intersections.items[0].phases.items.length;j++)
+                    // check if straightBulb exists
+                    // a boolean variable created just to check if straightBulb exists
+                    boolean modified = false;
+                    if(prediction.data.data.items.length!=0
+                            && prediction.data.data.items[0].intersections != null
+                            && prediction.data.data.items[0].intersections.items.length!=0
+                            && prediction.data.data.items[0].intersections.items[0].Topology != null
+                            && prediction.data.data.items[0].intersections.items[0].Topology.Turns != null
+                            && prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items.length != 0
+                            && prediction.data.data.items[0].intersections.items[0].phases != null
+                            && prediction.data.data.items[0].intersections.items[0].phases.items.length != 0)
                     {
-                        if(prediction.data.data.items[0].intersections.items[0].phases.items[j].PhaseNr == turn_ID)
+                        for (int i=0; i<prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items.length; i++)
                         {
-                            textView_straightBulb.setText(prediction.data.data.items[0].intersections.items[0].phases.items[j].BulbColor);
-                            modified = true;
-                            break;
+                            int turn_ID = prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items[i].PrimarySignalHeadID;
+                            String turn_type = prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items[i].TurnType;
+                            // if we find straight bulb, and its ID, we check its current color in Phase
+                            if (turn_type.equals("straight"))
+                            {
+                                for(int j=0; j<prediction.data.data.items[0].intersections.items[0].phases.items.length;j++)
+                                {
+                                    if(prediction.data.data.items[0].intersections.items[0].phases.items[j].PhaseNr == turn_ID)
+                                    {
+                                        textView_straightBulb.setText(prediction.data.data.items[0].intersections.items[0].phases.items[j].BulbColor);
+                                        modified = true;
+                                        break;
+                                    }
+                                }
+                                break; //after update straight bulb's color, break the for loop
+                            }
                         }
                     }
-                    break; //after update straight bulb's color, break the for loop
+                    // check to see if textView has been modified in the above big for loop
+                    // this makes sure clearing textView for lightBulb which is slightly different than other textViews because
+                    // it requires more steps to check if it exists in the TTS response
+                    // if modified is true, it means textView has been modified, we dont need to clear out textView
+                    if (!modified){
+                        textView_straightBulb.setText("");
+                    }
+
+                    // Check for alert Normal
+                    // first check if intersection is existed and items is existed.
+                    // if it is not normal, set textView_straightBulb to "alert"
+                    if(prediction.data.data.items.length != 0
+                            && prediction.data.data.items[0].intersections != null
+                            && prediction.data.data.items[0].intersections.items.length != 0
+                            && prediction.data.data.items[0].intersections.items[0].Alert != null)
+                    {
+                        if (!prediction.data.data.items[0].intersections.items[0].Alert.equals("Normal"))
+                        {
+                            textView_straightBulb.setText("Alert");
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
-        }
-        // check to see if textView has been modified in the above big for loop
-        // this makes sure clearing textView for lightBulb which is slightly different than other textViews because
-        // it requires more steps to check if it exists in the TTS response
-        // if modified is true, it means textView has been modified, we dont need to clear out textView
-        if (!modified){
-            textView_straightBulb.setText("");
-        }
-
-        // Check for alert Normal
-        // first check if intersection is existed and items is existed.
-        // if it is not normal, set textView_straightBulb to "alert"
-        if(prediction.data.data.items.length != 0
-                && prediction.data.data.items[0].intersections != null
-                && prediction.data.data.items[0].intersections.items.length != 0
-                && prediction.data.data.items[0].intersections.items[0].Alert != null)
-        {
-            if (!prediction.data.data.items[0].intersections.items[0].Alert.equals("Normal"))
-            {
-                textView_straightBulb.setText("Alert");
-            }
-        }
+        });
+        thread.start();
     }
 
     //this method will calculate the time needed for the car in current speed to the nearest stop line
-    public double calculateTimeToStopLine(){
+    //the unit of time is in seconds
+    public double CalculateTimeToStopLine(){
         double t = 0.0; //this is the variable will hold the result time
         double distanceToStopLine = prediction.data.data.items[0].intersections.items[0].Topology.DistanceToStopLine;
         if(speed != 0.0){
@@ -162,7 +187,7 @@ public class Algorithm {
     //assume only one intersection in one response
     //assume the first thing in predictiveChanges is has the smallest TimeToChange
     //this method will look over all phases and find the "straight" phase's first TimeToChange
-    public double getSmallestTimeToChange(){
+    public double GetSmallestTimeToChangeOfStraight(){
         int numOfPhases = prediction.data.data.items[0].intersections.items[0].phases.items.length;
         //get straight bulb's turn number
         int turn_ID = -1;
@@ -213,14 +238,14 @@ public class Algorithm {
         double distanceToStopLine = prediction.data.data.items[0].intersections.items[0].Topology.DistanceToStopLine;
         if(TimeInterval > warningInterval && distanceToStopLine > minWarningDistance
                 && distanceToStopLine < maxWarningDistance && speed >= minTriggerSpeed) {
-            compareTwoTimes();
+            CompareTwoTimes();
             previousTime = currentTimeInMs;
         }
     }
 
 
     //this method will look for the first green bulb in the predictiveChanges of straightPhaseIndex, and return index
-    public int searchGreenLight(){
+    public int SearchGreenLight(){
         for(int i = 0; i<prediction.data.data.items[0].intersections.items[0].phases.items[straightPhaseIndex].PredictiveChanges.Items.length; i++){
             if(prediction.data.data.items[0].intersections.items[0].phases.items[straightPhaseIndex].PredictiveChanges.Items[i].BulbColor.equals("Green")){
                 return i;
@@ -232,25 +257,24 @@ public class Algorithm {
 
     //this method will compare time to stopline and the time to change for the traffic signal, and display warnings
     //Assume Amber means the color of bulb is going to change
-    public void compareTwoTimes(){
-        double timeToStopLine = calculateTimeToStopLine();
+    public void CompareTwoTimes(){
+        double timeToStopLine = CalculateTimeToStopLine(); // in seconds
         // find the smallest Time to change of straight bulb and update straightPhaseIndex (which is a global variable)
-        double smallestTimeToChange = getSmallestTimeToChange();
+        double smallestTimeToChange = GetSmallestTimeToChangeOfStraight();
         // using the straightPhaseIndex to find the next color of straight bulb
         String nextColor = prediction.data.data.items[0].intersections.items[0].phases.items[straightPhaseIndex].BulbColor;
         //handling currently red bulb
+        String Red_and_Amber_warning_message = "slow down, or you will encounter Red or Amber light";
+        String Red_warning_message = "slow down, or you will encounter Red light";
+        String Amber_warning_message = "slow down, or you will encounter Amber light";
         switch (nextColor) {
             case "Red":
-                switch (prediction.data.data.items[0].intersections.items[0].phases.items[straightPhaseIndex].PredictiveChanges.Items[0].BulbColor) {
+                switch (prediction.data.data.items[0].intersections.items[0].phases.items[straightPhaseIndex].PredictiveChanges.Items[0].BulbColor)
+                {
                     case "Amber":
                         //current red but next will be Amber, which mean the bulb is changing to green, check if user arrives stopline too early
                         if (timeToStopLine <= smallestTimeToChange + 3) {
-                            try {
-                                alarm.play();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            Log.i("Warning", "slow down, or you will encounter Red light or Amber light");
+                            DisplayWarning(Red_and_Amber_warning_message);
                         }
                         break;
                     case "Green":
@@ -258,80 +282,69 @@ public class Algorithm {
                         //so if driver will arrive the stopline before bulb turns green, we warn driver to slow down
                         int timeToChangeOfNextGreen = prediction.data.data.items[0].intersections.items[0].phases.items[straightPhaseIndex].PredictiveChanges.Items[0].TimeToChange;
                         if (timeToStopLine < timeToChangeOfNextGreen) {
-                            try {
-                                alarm.play();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            Log.i("Warning", "slow down, or you will encounter red or Amber light");
+                            DisplayWarning(Red_and_Amber_warning_message);
                         }
                         break;
                     case "Red":
                         //current red but next will be red.
-                        try {
-                            alarm.play();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        Log.i("Warning", "slow down, or you will encounter red light");
+                        DisplayWarning(Red_warning_message);
                         break;
                 }
                 break;
             //handling currently Amber bulb
             case "Amber":
-                //current Amber, then next one has to be Red
-                if(prediction.data.data.items[0].intersections.items[0].phases.items[straightPhaseIndex].PredictiveChanges.Items[0].BulbColor.equals("Red")){
-                    int greenIndex = searchGreenLight();
+                if(prediction.data.data.items[0].intersections.items[0].phases.items[straightPhaseIndex].PredictiveChanges.Items[0].BulbColor.equals("Red"))
+                {
+                    //current Amber, and the next color is Red
+                    int greenIndex = SearchGreenLight();
                     if(greenIndex < 0){
                         //this means GreenLight does not exist in the predictiveChanges
-                        try {
-                            alarm.play();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        Log.i("Warning", "slow down, or you will encounter Amber or Red light");
+                        //which means this bulb would not turn green in a period of time
+                        DisplayWarning(Red_and_Amber_warning_message);
+                        break;
                     }
+                    // Following code will only be executed when green light is existed in the predictiveChanges
+                    // we need to see if the driver can arrive the stop line when the light bulb truns green
                     int timeToChangeOfNextGreenLight = prediction.data.data.items[0].intersections.items[0].phases.items[straightPhaseIndex].PredictiveChanges.Items[greenIndex].TimeToChange;
                     if(timeToStopLine < timeToChangeOfNextGreenLight){
-                        //if driver arrive stopline before the bulb turns green, warn driver to slow down
-                        try {
-                            alarm.play();
-                        }
-                        catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                        Log.i("Warning", "slow down, or you will encounter Amber or Red light");
+                        //if driver arrive stopline before the bulb turns green, warning driver to slow down
+                        DisplayWarning(Red_and_Amber_warning_message);
+                        break;
+                    }
+                }
+                else if(prediction.data.data.items[0].intersections.items[0].phases.items[straightPhaseIndex].PredictiveChanges.Items[0].BulbColor.equals("Green"))
+                {
+                    //current Amber, and the next color will be Green
+                    //this situation is rare, but I take considerations of it
+                    int greenIndex = SearchGreenLight(); //get index of next green light
+                    int timeToChangeOfNextGreenLight = prediction.data.data.items[0].intersections.items[0].phases.items[straightPhaseIndex].PredictiveChanges.Items[greenIndex].TimeToChange;
+                    if (timeToStopLine < timeToChangeOfNextGreenLight) // if user arrives stopline before light bulb turns green, display warning
+                    {
+                        DisplayWarning(Amber_warning_message);
+                        break;
                     }
                 }
                 break;
             //handling currently Green Bulb
             case "Green":
-                if (prediction.data.data.items[0].intersections.items[0].phases.items[straightPhaseIndex].PredictiveChanges.Items[0].BulbColor.equals("Amber")) {
+                if (prediction.data.data.items[0].intersections.items[0].phases.items[straightPhaseIndex].PredictiveChanges.Items[0].BulbColor.equals("Amber"))
+                {
                     //current Green, but next will be Amber
-                    if (timeToStopLine >= smallestTimeToChange) {
-                        try {
-                            alarm.play();
-                        }
-                        catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        Log.i("Warning", "slow down, or you will encounter Amber or Red light");
+                    if (timeToStopLine >= smallestTimeToChange)
+                    {
+                        DisplayWarning(Red_and_Amber_warning_message);
+                        break;
                     }
-                } else if (prediction.data.data.items[0].intersections.items[0].phases.items[straightPhaseIndex].PredictiveChanges.Items[0].BulbColor.equals("Green")) {
+                } else if(prediction.data.data.items[0].intersections.items[0].phases.items[straightPhaseIndex].PredictiveChanges.Items[0].BulbColor.equals("Green"))
+                {
                     //current Green, but next will be Green as well
                     //do nothing
-
                 } else {
                     // current Green, but next color will be Red
-                    if (timeToStopLine >= smallestTimeToChange) {
-                        try {
-                            alarm.play();
-                        }
-                        catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        Log.i("Warning", "slow down, or you will encounter Amber or Red light");
+                    if (timeToStopLine >= smallestTimeToChange)
+                    {
+                        DisplayWarning(Red_and_Amber_warning_message);
+                        break;
                     }
                 }
                 break;

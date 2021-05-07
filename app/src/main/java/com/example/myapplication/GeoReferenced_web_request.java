@@ -29,6 +29,8 @@ import androidx.core.app.ActivityCompat;
 
 import com.google.gson.Gson;
 
+import java.util.Date;
+
 
 public class GeoReferenced_web_request extends AppCompatActivity {
     // private variables
@@ -81,6 +83,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
 
         locationListener = new LocationListener() {
             @Override
+            // After testing, the onLocationChanged method takes less than 1 ms to compute
             public void onLocationChanged(@NonNull Location location) {
                 // location in the parameter has everything we need
                 longitude = String.valueOf(location.getLongitude());
@@ -109,7 +112,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                         Gson gson = new Gson();
                         prediction = gson.fromJson(TTS_response, Prediction.class);
                         // set up algorithm class with prediction, speed and alarm
-                        algorithm.set(prediction, speed, alarm);
+                        algorithm.Set(prediction, speed, alarm);
                         algorithm.DetermineMaxWarningDistance();
                         // once we got prediction, we can set up textView for DTS, street, current bulb color
                         // but set textView will be checking if certain fields of the Prediction is valid in order to
@@ -118,7 +121,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                         // It also checks Alert Normal in the prediction, if it is not "Normal" then the
                         // color of bulb is not reliable, and set textView for bulb to "Alert" to alert user
                         try {
-                            algorithm.set_textView(textView_DTS, textView_street, textView_bulb);
+                            algorithm.SetTextView(textView_DTS, textView_street, textView_bulb);
                         }  catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -127,7 +130,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                         //  this will also clear the textViews once the data is invalid
                         //  this can be said as an error checking to make sure certain fields of predication is valid
                         //  in order to do the algorithm
-                        if(!algorithm.content_checking())
+                        if(!algorithm.ContentChecking())
                             return;
                         try {
                             algorithm.ToCompare();
