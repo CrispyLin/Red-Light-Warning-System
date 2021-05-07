@@ -188,7 +188,6 @@ public class Algorithm {
     //assume the first thing in predictiveChanges is has the smallest TimeToChange
     //this method will look over all phases and find the "straight" phase's first TimeToChange
     public double GetSmallestTimeToChangeOfStraight(){
-        int numOfPhases = prediction.data.data.items[0].intersections.items[0].phases.items.length;
         //get straight bulb's turn number
         int turn_ID = -1;
         for (int i=0; i<prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items.length; i++)
@@ -273,7 +272,7 @@ public class Algorithm {
                 {
                     case "Amber":
                         //current red but next will be Amber, which mean the bulb is changing to green, check if user arrives stopline too early
-                        if (timeToStopLine <= smallestTimeToChange + 3) {
+                        if (timeToStopLine <= smallestTimeToChange) {
                             DisplayWarning(Red_and_Amber_warning_message);
                         }
                         break;

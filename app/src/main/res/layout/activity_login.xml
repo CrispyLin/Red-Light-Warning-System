@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#3D3D3D"
@@ -110,23 +111,6 @@
             android:paddingRight="24dp">
 
             <TextView
-                android:id="@+id/tv0"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Remember me"
-                android:textColor="#fff"
-                android:textSize="16sp"
-                android:visibility="gone" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" | "
-                android:textColor="#000"
-                android:textSize="20sp"
-                android:visibility="gone" />
-
-            <TextView
                 android:id="@+id/tv1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -168,11 +152,12 @@
             android:layout_marginLeft="24dp"
             android:layout_marginTop="30dp"
             android:layout_marginRight="24dp"
-            android:background="#BFBFB5"
+            android:background="#3c3c3c"
             android:gravity="center"
             android:text="Login"
-            android:textColor="#9AFF02"
-            android:textSize="16sp" />
+            android:textColor="#8BC34A"
+            android:textSize="16sp"
+            app:backgroundTint="#3c3c3c" />
 
 
         <TextView
