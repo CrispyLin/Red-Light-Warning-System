@@ -168,7 +168,6 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                 locationManager.removeUpdates(locationListener);
                 finish();
             }
-
         });
 
         //start getting GPS locations

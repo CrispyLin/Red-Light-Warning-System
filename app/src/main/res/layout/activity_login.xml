@@ -110,10 +110,10 @@
             android:paddingLeft="24dp"
             android:paddingRight="24dp">
 
-            <TextView
-                android:id="@+id/tv1"
+            <Button
+                android:id="@+id/button_ForgotPassW"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="Forgot password? "
                 android:textColor="#fff"
                 android:textSize="16sp" />
@@ -160,20 +160,20 @@
             app:backgroundTint="#3c3c3c" />
 
 
-        <TextView
-            android:id="@+id/textView_register"
+        <Button
+            android:id="@+id/button_SignUp"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-
+            android:layout_centerInParent="true"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="30dp"
             android:layout_marginRight="24dp"
-            android:layout_marginBottom="20dp"
-            android:background="#3D3D3D"
+            android:background="#3c3c3c"
             android:gravity="center"
-            android:text="sign up"
-            android:textColor="#9AFF02"
-            android:textSize="16sp" />
+            android:text="Sign Up"
+            android:textColor="#8BC34A"
+            android:textSize="16sp"
+            app:backgroundTint="#3c3c3c" />
 
 
     </LinearLayout>
