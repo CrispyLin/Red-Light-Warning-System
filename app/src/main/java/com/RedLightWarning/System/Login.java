@@ -1,6 +1,7 @@
 package com.RedLightWarning.System;
 
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +20,7 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // Get user's username password and IP from last login
         SharedPreferences sharedPreferences = getSharedPreferences("login_info", MODE_PRIVATE);
         // check if user's data existed
@@ -33,6 +35,30 @@ public class Login extends AppCompatActivity {
             // and new credentials will be saved
             manual_login(sharedPreferences);
         }
+
+        // create click listener for button_ForgotPassW
+        Button Btn_ForgotPassW = (Button) findViewById(R.id.button_ForgotPassW);
+        Btn_ForgotPassW.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url_forgotPW = "http://216.151.19.135/Account/ForgotPassword";
+                Uri uri = Uri.parse(url_forgotPW);
+                Intent registerWeb = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(registerWeb);
+            }
+        });
+
+        // create click listener for button_SignUp
+        Button Btn_SignUp = (Button) findViewById(R.id.button_SignUp);
+        Btn_SignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url_register = "http://216.151.19.135/Account/Register";
+                Uri uri = Uri.parse(url_register);
+                Intent registerWeb = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(registerWeb);
+            }
+        });
         return;
     }
 
