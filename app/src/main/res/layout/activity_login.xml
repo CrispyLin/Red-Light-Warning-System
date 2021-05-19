@@ -115,7 +115,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Forgot password? "
-                android:textColor="#fff"
+                android:textColor="#8BC34A"
+                android:background="#3c3c3c"
+                app:backgroundTint="#3c3c3c"
                 android:textSize="16sp" />
 
 
