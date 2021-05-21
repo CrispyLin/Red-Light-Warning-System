@@ -24,6 +24,10 @@ This is the first class and instance which is interacted with. In this class, th
 # Prediction
 This is not much of a class, just stores json information. Utilizes Gsontojson parsing.
 
+# UI
+The UI is all stored in layout class, with a login xml file and a georefernce xml file. 
+In themses you can change some of the colors of the app.
+
 
 
 
