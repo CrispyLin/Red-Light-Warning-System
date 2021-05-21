@@ -2,6 +2,7 @@ package com.RedLightWarning.System;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -122,6 +123,8 @@ public class Login extends AppCompatActivity {
         Snackbar snackbar;
         View view = findViewById(R.id.login_failed);
         snackbar = Snackbar.make(view, "Login Failed", 5000);
+        snackbar.setTextColor(Color.parseColor("#8BC34A"));
+        snackbar.set
         snackbar.show();
     }
 
