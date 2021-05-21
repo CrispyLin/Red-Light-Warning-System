@@ -1,5 +1,6 @@
 package com.RedLightWarning.System;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +14,9 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.google.android.material.snackbar.Snackbar;
+
 public class Login extends AppCompatActivity {
     // member variable
     private final String def_IP = "38.103.174.3:5832"; // the default IP that can be modified once TTS changes their IP
@@ -85,7 +89,7 @@ public class Login extends AppCompatActivity {
         // if session code is null, it means we failed to get session code from TTS
         // we would direct user to manual login
         if (session_code == null) {
-            Log.e("Mytag", "Login Failed");
+            Display_Login_Failed_Message();
             // if TTS's server doesn't like old credentials, direct user to manual login as well
             manual_login(sharedPreferences);
         } else {
@@ -110,6 +114,15 @@ public class Login extends AppCompatActivity {
         startActivity(startIntent);
         finish();
         return;
+    }
+
+
+    private void Display_Login_Failed_Message(){
+        Log.e("Mytag", "Login Failed");
+        Snackbar snackbar;
+        View view = findViewById(R.id.login_failed);
+        snackbar = Snackbar.make(view, "Login Failed", 5000);
+        snackbar.show();
     }
 
 
@@ -140,7 +153,7 @@ public class Login extends AppCompatActivity {
                 }
                 // if we failed to get session code from TTS, we think user's credentials were wrong
                 if (session_code == null) {
-                    Log.e("Mytag", "Login Failed");
+                    Display_Login_Failed_Message();
                 } else {
                     // if we successfully get the session code, then we save user's credentials for auto login next time
                     // and direct user to next activity (and close login activity)

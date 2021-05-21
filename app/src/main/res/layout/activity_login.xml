@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:background="#3D3D3D"
     android:fitsSystemWindows="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/login_failed">
 
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
