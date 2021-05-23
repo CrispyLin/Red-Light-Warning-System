@@ -71,7 +71,7 @@ public class Algorithm {
     // this method will detetmine the max warning Distance to trigger the alarm
     // using the global varibale private static double speed.
     public void DetermineMaxWarningDistance(){
-        double new_maxWarningDistance = 0.0;
+        double new_maxWarningDistance;
         // this stopping distance formula is found from web:
         // https://mobilityblog.tuv.com/en/calculating-stopping-distance-braking-is-not-a-matter-of-luck/#:~:text=Stopping%20distance%20%3D%20reaction%20distance%20%2B%20braking%20distance
         // speed's unit is m/s so we have to convert it to km/h
@@ -82,88 +82,84 @@ public class Algorithm {
 
 
     // this method will set up textViews for DTS, street and current bulb's color
-    public void SetTextView(TextView textView_DTS, TextView textView_currentStreet, TextView textView_straightBulb) throws Exception {
-        final String[] geoReferenceResponse = {null};
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try  {
-                    // check if we can get street name from prediction
-                    if(prediction.data.data.items.length!=0
-                            && prediction.data.data.items[0].intersections != null
-                            && prediction.data.data.items[0].intersections.items.length!=0)
-                        // set Street first
-                        textView_currentStreet.setText(prediction.data.data.items[0].intersections.items[0].Name);
-                    else{
-                        textView_currentStreet.setText("");
-                    }
-
-                    // check if DTS exists
-                    if(prediction.data.data.items.length!=0
-                            && prediction.data.data.items[0].intersections != null
-                            && prediction.data.data.items[0].intersections.items.length!=0
-                            && prediction.data.data.items[0].intersections.items[0].Topology != null)
-                        textView_DTS.setText(prediction.data.data.items[0].intersections.items[0].Topology.DistanceToStopLine + "");
-                    else{
-                        textView_DTS.setText("");
-                    }
-
-                    // check if straightBulb exists
-                    // a boolean variable created just to check if straightBulb exists
-                    boolean modified = false;
-                    if(prediction.data.data.items.length!=0
-                            && prediction.data.data.items[0].intersections != null
-                            && prediction.data.data.items[0].intersections.items.length!=0
-                            && prediction.data.data.items[0].intersections.items[0].Topology != null
-                            && prediction.data.data.items[0].intersections.items[0].Topology.Turns != null
-                            && prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items.length != 0
-                            && prediction.data.data.items[0].intersections.items[0].phases != null
-                            && prediction.data.data.items[0].intersections.items[0].phases.items.length != 0)
-                    {
-                        for (int i=0; i<prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items.length; i++)
-                        {
-                            int turn_ID = prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items[i].PrimarySignalHeadID;
-                            String turn_type = prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items[i].TurnType;
-                            // if we find straight bulb, and its ID, we check its current color in Phase
-                            if (turn_type.equals("straight"))
-                            {
-                                for(int j=0; j<prediction.data.data.items[0].intersections.items[0].phases.items.length;j++)
-                                {
-                                    if(prediction.data.data.items[0].intersections.items[0].phases.items[j].PhaseNr == turn_ID)
-                                    {
-                                        textView_straightBulb.setText(prediction.data.data.items[0].intersections.items[0].phases.items[j].BulbColor);
-                                        modified = true;
-                                        break;
-                                    }
-                                }
-                                break; //after update straight bulb's color, break the for loop
-                            }
-                        }
-                    }
-                    // check to see if textView has been modified in the above big for loop
-                    // this makes sure clearing textView for lightBulb which is slightly different than other textViews because
-                    // it requires more steps to check if it exists in the TTS response
-                    // if modified is true, it means textView has been modified, we dont need to clear out textView
-                    if (!modified){
-                        textView_straightBulb.setText("");
-                    }
-
-                    // Check for alert Normal
-                    // first check if intersection is existed and items is existed.
-                    // if it is not normal, set textView_straightBulb to "alert"
-                    if(prediction.data.data.items.length != 0
-                            && prediction.data.data.items[0].intersections != null
-                            && prediction.data.data.items[0].intersections.items.length != 0
-                            && prediction.data.data.items[0].intersections.items[0].Alert != null)
-                    {
-                        if (!prediction.data.data.items[0].intersections.items[0].Alert.equals("Normal"))
-                        {
-                            textView_straightBulb.setText("Alert");
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+    public void SetTextView(TextView textView_DTS, TextView textView_currentStreet, TextView textView_straightBulb){
+        Thread thread = new Thread(() -> {
+            try  {
+                // check if we can get street name from prediction
+                if(prediction.data.data.items.length!=0
+                        && prediction.data.data.items[0].intersections != null
+                        && prediction.data.data.items[0].intersections.items.length!=0)
+                    // set Street first
+                    textView_currentStreet.setText(prediction.data.data.items[0].intersections.items[0].Name);
+                else{
+                    textView_currentStreet.setText("");
                 }
+
+                // check if DTS exists
+                if(prediction.data.data.items.length!=0
+                        && prediction.data.data.items[0].intersections != null
+                        && prediction.data.data.items[0].intersections.items.length!=0
+                        && prediction.data.data.items[0].intersections.items[0].Topology != null)
+                    textView_DTS.setText(prediction.data.data.items[0].intersections.items[0].Topology.DistanceToStopLine + "");
+                else{
+                    textView_DTS.setText("");
+                }
+
+                // check if straightBulb exists
+                // a boolean variable created just to check if straightBulb exists
+                boolean modified = false;
+                if(prediction.data.data.items.length!=0
+                        && prediction.data.data.items[0].intersections != null
+                        && prediction.data.data.items[0].intersections.items.length!=0
+                        && prediction.data.data.items[0].intersections.items[0].Topology != null
+                        && prediction.data.data.items[0].intersections.items[0].Topology.Turns != null
+                        && prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items.length != 0
+                        && prediction.data.data.items[0].intersections.items[0].phases != null
+                        && prediction.data.data.items[0].intersections.items[0].phases.items.length != 0)
+                {
+                    for (int i=0; i<prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items.length; i++)
+                    {
+                        int turn_ID = prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items[i].PrimarySignalHeadID;
+                        String turn_type = prediction.data.data.items[0].intersections.items[0].Topology.Turns.Items[i].TurnType;
+                        // if we find straight bulb, and its ID, we check its current color in Phase
+                        if (turn_type.equals("straight"))
+                        {
+                            for(int j=0; j<prediction.data.data.items[0].intersections.items[0].phases.items.length;j++)
+                            {
+                                if(prediction.data.data.items[0].intersections.items[0].phases.items[j].PhaseNr == turn_ID)
+                                {
+                                    textView_straightBulb.setText(prediction.data.data.items[0].intersections.items[0].phases.items[j].BulbColor);
+                                    modified = true;
+                                    break;
+                                }
+                            }
+                            break; //after update straight bulb's color, break the for loop
+                        }
+                    }
+                }
+                // check to see if textView has been modified in the above big for loop
+                // this makes sure clearing textView for lightBulb which is slightly different than other textViews because
+                // it requires more steps to check if it exists in the TTS response
+                // if modified is true, it means textView has been modified, we dont need to clear out textView
+                if (!modified){
+                    textView_straightBulb.setText("");
+                }
+
+                // Check for alert Normal
+                // first check if intersection is existed and items is existed.
+                // if it is not normal, set textView_straightBulb to "alert"
+                if(prediction.data.data.items.length != 0
+                        && prediction.data.data.items[0].intersections != null
+                        && prediction.data.data.items[0].intersections.items.length != 0
+                        && prediction.data.data.items[0].intersections.items[0].Alert != null)
+                {
+                    if (!prediction.data.data.items[0].intersections.items[0].Alert.equals("Normal"))
+                    {
+                        textView_straightBulb.setText("Alert");
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
         thread.start();
@@ -172,7 +168,7 @@ public class Algorithm {
     //this method will calculate the time needed for the car in current speed to the nearest stop line
     //the unit of time is in seconds
     public double CalculateTimeToStopLine(){
-        double t = 0.0; //this is the variable will hold the result time
+        double t; //this is the variable will hold the result time
         double distanceToStopLine = prediction.data.data.items[0].intersections.items[0].Topology.DistanceToStopLine;
         if(speed != 0.0){
             t = distanceToStopLine/speed;
@@ -223,7 +219,7 @@ public class Algorithm {
 
     //display warning at least every warningInterval seconds by calculating time interval to limit the warning frequency.
     //if driver is too far or too close the intersection, stop display warnings
-    public void ToCompare() throws Exception
+    public void ToCompare()
     {
         //get current time
         Date date = new Date();

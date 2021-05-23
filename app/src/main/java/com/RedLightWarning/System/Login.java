@@ -111,9 +111,7 @@ public class Login extends AppCompatActivity {
         builder1.setMessage("Login Failed, check your username, password, IP and try again.");
         builder1.setCancelable(true);
 
-        builder1.setPositiveButton(
-                "Ok",
-                (dialog, id) -> dialog.cancel());
+        builder1.setPositiveButton("Ok", (dialog, id) -> dialog.cancel());
         AlertDialog alert11 = builder1.create();
         alert11.show();
     }

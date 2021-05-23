@@ -53,22 +53,16 @@ public class TestTest
             return;
         }
         session_code = sessionCode;
-        String geoReferenceURL = "http://" + IP + "/APhA/Services/GeoReferencedPredictions?sessionCode=" + sessionCode + "&latitude=45.524868&longitude=-122.694144&heading=85&includeTopology=yes&asTurns=yes&includePermissives=no&includeAmber=no&bearingType=Compass&matchingMode=TTSDefault&version=1.0.10&returnJSON=yes";
-
-        String geoReferenceResponse = GetStringFromURLRequest(geoReferenceURL);
     }
 
     public static String SendInputs(String url) throws Exception
     {
         final String[] geoReferenceResponse = {null};
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try  {
-                    geoReferenceResponse[0] = GetStringFromURLRequest(url);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        Thread thread = new Thread(() -> {
+            try  {
+                geoReferenceResponse[0] = GetStringFromURLRequest(url);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
         thread.start();
@@ -138,14 +132,11 @@ public class TestTest
     }
 
     public static String main(String[] args) throws InterruptedException {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try  {
-                    DoTest(args); //Your code goes here
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        Thread thread = new Thread(() -> {
+            try  {
+                DoTest(args); //Your code goes here
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 

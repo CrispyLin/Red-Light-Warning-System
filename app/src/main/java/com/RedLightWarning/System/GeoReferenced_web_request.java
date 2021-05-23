@@ -6,7 +6,6 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 
 import androidx.annotation.NonNull;
@@ -93,7 +92,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
 
                 // set coordinate, heading, and speed's textViews initially
                 // other textViews (DTS, current bulb, street) will be set once we get prediction response from TTS
-                textView_coordinate.setText(longitude + ",   " + latitude);
+                textView_coordinate.setText(longitude + ",  " + latitude);
                 textView_heading.setText(heading);
                 textView_speed.setText(speed+"");
 
@@ -139,7 +138,7 @@ public class GeoReferenced_web_request extends AppCompatActivity {
                     else{
                         Log.e("Mytag", "Error! TTS response is empty!");
                     }
-                } catch (InterruptedException e) {
+                } catch (Error e) {
                     e.printStackTrace();
                 }
             }
@@ -152,22 +151,19 @@ public class GeoReferenced_web_request extends AppCompatActivity {
         };
 
         Button Btn_Logout = (Button) findViewById(R.id.button_logOut);
-        Btn_Logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.remove("username");
-                editor.remove("password");
-                editor.remove("IP");
-                editor.commit();
-                // redirect user to the login page
-                Intent startIntent = new Intent(getApplicationContext(), Login.class);
-                startActivity(startIntent);
-                // close this activity, but first close the location listener which is listening on the location, otherwise
-                // finish() won't be executed
-                locationManager.removeUpdates(locationListener);
-                finish();
-            }
+        Btn_Logout.setOnClickListener(v -> {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove("username");
+            editor.remove("password");
+            editor.remove("IP");
+            editor.apply();
+            // redirect user to the login page
+            Intent startIntent = new Intent(getApplicationContext(), Login.class);
+            startActivity(startIntent);
+            // close this activity, but first close the location listener which is listening on the location, otherwise
+            // finish() won't be executed
+            locationManager.removeUpdates(locationListener);
+            finish();
         });
 
         //start getting GPS locations
@@ -178,10 +174,10 @@ public class GeoReferenced_web_request extends AppCompatActivity {
     //checking if response is empty
     //return true if response is not empty
     //return false if response is empty
-    private String sendLocationToTTS() throws InterruptedException {
+    private String sendLocationToTTS() {
         // make a get request URL by using: IP, session_code, latitude, longitude, heading
         String geoReferenceURL = "http://" + IP +"/APhA/Services/GeoReferencedPredictions?sessionCode=" + session_code + "&latitude=" + latitude + "&longitude=" + longitude + "&heading=" + heading + "&includeTopology=yes&asTurns=yes&includePermissives=no&includeAmber=no&bearingType=Compass&matchingMode=TTSDefault&version=1.0.10&returnJSON=yes";
-        String TTS_response = null;
+        String TTS_response;
         try {
             // send url to the TTS, get response back and saved in TTS_response
             TTS_response = TestTest.SendInputs(geoReferenceURL);
