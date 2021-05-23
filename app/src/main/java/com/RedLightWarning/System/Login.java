@@ -27,7 +27,7 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_login); //important!!! This will load the view fully
         // Get user's username password and IP from last login
         SharedPreferences sharedPreferences = getSharedPreferences("login_info", MODE_PRIVATE);
         // check if user's data existed
