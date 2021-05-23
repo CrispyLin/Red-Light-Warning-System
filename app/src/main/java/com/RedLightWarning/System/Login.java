@@ -1,11 +1,13 @@
 package com.RedLightWarning.System;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
@@ -25,7 +27,7 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_login);
         // Get user's username password and IP from last login
         SharedPreferences sharedPreferences = getSharedPreferences("login_info", MODE_PRIVATE);
         // check if user's data existed
@@ -120,11 +122,19 @@ public class Login extends AppCompatActivity {
 
     private void Display_Login_Failed_Message(){
         Log.e("Mytag", "Login Failed");
-        Snackbar snackbar;
-        View view = findViewById(R.id.login_failed);
-        snackbar = Snackbar.make(view, "Login Failed", 5000);
-        snackbar.setTextColor(Color.parseColor("#8BC34A"));
-        snackbar.show();
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setMessage("Login Failed, check your username, password, IP and try again.");
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                "Ok",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
     }
 
 
